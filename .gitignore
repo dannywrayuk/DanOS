@@ -1,0 +1,5 @@
+/**/*.o
+/**/*.d
+
+danos.bin
+danos.hd
