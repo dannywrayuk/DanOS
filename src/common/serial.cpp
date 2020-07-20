@@ -1,4 +1,4 @@
-#include <common/string.h>
+#include <common/cstring.h>
 #include <common/serial.h>
 #include <common/port.h>
 
@@ -36,4 +36,8 @@ void write_serial(string a)
         outb(COMPORT1, a[x]);
         x++;
     }
+}
+void write_serial(const string a)
+{
+    write_serial((string)a);
 }

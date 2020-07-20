@@ -1,4 +1,4 @@
-#include <stdint.h>
+#include <common/stdint.h>
 #include <common/port.h>
 
 uint8_t inb(uint16_t _port)

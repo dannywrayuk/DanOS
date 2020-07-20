@@ -22,7 +22,7 @@ OBJ=$(CFILES:.cpp=.cpp.o) $(ASMFILES:.asm=.asm.o)
 
 .PHONY: all clean clean-hd new run
 
-all: clean $(KERNELBIN) run
+all: $(KERNELBIN) run
 
 $(KERNELBIN): $(OBJ)
 	@echo "Building: $(KERNELBIN)"
@@ -46,6 +46,14 @@ clean:
 	@echo "Cleaning temporary files..."
 	@rm -f  $(OBJ) $(KERNELBIN) $(DEPFILES)
 	@echo "Done."
+
+clean-orphan:
+	@echo "Cleaning temporary files..."
+	@rm -f  $(shell find $(SRCDIR) -type f -name '*.cpp.d') \
+			$(shell find $(SRCDIR) -type f -name '*.cpp.o') \
+			$(shell find $(SRCDIR) -type f -name '*.asm.o')
+	@echo "Done."
+
 
 clean-hd:
 	@echo "Cleaning hard disk..."

@@ -1,8 +1,9 @@
 #pragma once
-#include <common/string.h>
-#include <stdint.h>
+#include <common/cstring.h>
+#include <common/stdint.h>
 
+void dbg(const string msg);
 void dbg(string msg);
 void dbgc(char msg);
-void dbg(uint32_t msg);
+// void dbg(uint32_t msg);
 void endl();
