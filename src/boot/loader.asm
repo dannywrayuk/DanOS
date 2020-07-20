@@ -1,7 +1,7 @@
 MBALIGN  equ  1 << 0            ; align loaded modules on page boundaries
 MEMINFO  equ  1 << 1            ; provide memory map
 VIDINFO  equ  1 << 2	        ; control video mode
-FLAGS    equ  MBALIGN | MEMINFO | VIDINFO 
+FLAGS    equ  MBALIGN | MEMINFO ;| VIDINFO 
 MAGIC    equ  0x1BADB002        ; 'magic number' lets bootloader find the header
 CHECKSUM equ -(MAGIC + FLAGS)   ; checksum of above, to prove we are multiboot
 
@@ -11,11 +11,9 @@ align 4
 	dd FLAGS
 	dd CHECKSUM
 
-	dd 0, 0, 0, 0, 0
-	dd 0 ; 0 = set graphics mode
-	dd 0, 0, 0 ; Width, height, depth
-
-
+	; dd 0, 0, 0, 0, 0
+	; dd 1 ; 0 = set graphics mode
+	; dd 0, 0, 0 ; Width, height, depth
 
 section .text
 align 32

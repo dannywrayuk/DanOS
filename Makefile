@@ -13,25 +13,29 @@ CFLAGS= -m32 -ffreestanding -std=c++11 -mno-red-zone -fno-exceptions -nostdlib -
 LFLAGS= -T $(SRCDIR)/link.ld
 
 QEMU=qemu-system-x86_64
-QEMUFLAGS=-m 2G -enable-kvm -smp 4 -debugcon stdio -kernel $(KERNELBIN) -hda $(KERNELHD)
+QEMUFLAGS= -m 2G -smp 4 -no-reboot -serial stdio -kernel $(KERNELBIN) -hda $(KERNELHD)
 
 CFILES= $(shell find $(SRCDIR) -type f -name '*.cpp')
 ASMFILES= $(shell find $(SRCDIR) -type f -name '*.asm')
 DEPFILES= $(CFILES:.cpp=.cpp.d)
 OBJ=$(CFILES:.cpp=.cpp.o) $(ASMFILES:.asm=.asm.o)
 
-.PHONY: all clean new run
+.PHONY: all clean clean-hd new run
 
-all: $(KERNELBIN) 
+all: clean $(KERNELBIN) run
 
 $(KERNELBIN): $(OBJ)
-	$(LD) $(OBJ) $(LFLAGS) -o $(KERNELBIN)
+	@echo "Building: $(KERNELBIN)"
+	@$(LD) $(OBJ) $(LFLAGS) -o $(KERNELBIN)
+	@echo "Done."
 
 %.cpp.o: %.cpp
-	$(CXX) $(CFLAGS) -MMD -c $< -o $@
+	@echo "Compiling: $<"
+	@$(CXX) $(CFLAGS) -MMD -c $< -o $@
 
 %.asm.o: %.asm
-	$(AS) $(ASFLAGS)  $< -o $@
+	@echo "Compiling: $<"
+	@$(AS) $(ASFLAGS)  $< -o $@
 
 %.asm:
 
@@ -39,12 +43,17 @@ $(KERNELHD):
 	qemu-img create -f qcow2 $(KERNELHD) $(HDSIZE)
 
 clean: 
-	rm -f  $(OBJ) $(KERNELBIN) $(DEPFILES)
+	@echo "Cleaning temporary files..."
+	@rm -f  $(OBJ) $(KERNELBIN) $(DEPFILES)
+	@echo "Done."
 
 clean-hd:
-	rm -f $(OBJ) $(KERNELHD)
+	@echo "Cleaning hard disk..."
+	@rm -f $(OBJ) $(KERNELHD)
+	@echo "Done."
 
 new: clean all
 
 run: $(KERNELBIN) $(KERNELHD)
-	$(QEMU) $(QEMUFLAGS) 
+	@echo "Running...\n"
+	@$(QEMU) $(QEMUFLAGS)
