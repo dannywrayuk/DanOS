@@ -13,8 +13,8 @@ extern "C" void KMAIN(uint32_t magic, uint32_t addr)
     {
         return;
     }
-    uint8_t a = 0x41;
     init_serial();
     dbg("Serial initialised.\n");
+    endl();
     test_all();
 }

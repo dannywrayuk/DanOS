@@ -5,37 +5,32 @@
 
 string reason;
 
-void fail_message(string msg)
+void fail_message(const string msg)
 {
-    reason = msg;
+    reason = (char *)msg;
+}
+
+void test_debug_message(const string msg)
+{
+    LABEL_DEBUG;
+    dbg(msg);
+    endl();
 }
 
 int test(int passing, const string name)
 {
     if (passing)
     {
-        dbg(ANSI_COLOUR_BACKGROUND_GREEN);
-        dbg(ANSI_BOLD);
-        dbg(" PASS ");
-        dbg(ANSI_RESET);
-        dbg(" ");
+        LABEL_PASS;
         dbg(name);
         endl();
     }
     else
     {
-        dbg(ANSI_COLOUR_BACKGROUND_RED);
-        dbg(ANSI_BOLD);
-        dbg(" FAIL ");
-        dbg(ANSI_RESET);
-        dbg(" ");
+        LABEL_FAIL;
         dbg(name);
         endl();
-        dbg(ANSI_COLOUR_BACKGROUND_BLUE);
-        dbg(ANSI_BOLD);
-        dbg(" REASON ");
-        dbg(ANSI_RESET);
-        dbg(" ");
+        LABEL_REASON;
         dbg(reason);
         endl();
     }
@@ -47,29 +42,15 @@ int complete(int result, const string name)
     if (result)
     {
         endl();
-        dbg(ANSI_COLOUR_BACKGROUND_GREEN);
-        dbg(ANSI_BOLD);
-        dbg(" PASS ");
-        dbg(ANSI_COLOUR_BACKGROUND_BLUE);
-        dbg(ANSI_BOLD);
-        dbg(" ");
-        dbg(name);
-        dbg(" ");
-        dbg(ANSI_RESET);
+        LABEL_PASS;
+        LABEL_OTHER(name);
         endl();
     }
     else
     {
         endl();
-        dbg(ANSI_COLOUR_BACKGROUND_RED);
-        dbg(ANSI_BOLD);
-        dbg(" FAIL ");
-        dbg(ANSI_COLOUR_BACKGROUND_BLUE);
-        dbg(ANSI_BOLD);
-        dbg(" ");
-        dbg(name);
-        dbg(" ");
-        dbg(ANSI_RESET);
+        LABEL_FAIL;
+        LABEL_OTHER(name);
         endl();
     }
     return result;

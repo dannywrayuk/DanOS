@@ -1,6 +1,7 @@
 #include <common/cstring.h>
 #include <stdint.h>
 #include <logging/debug.h>
+#include <logging/ansi_colours.h>
 
 #include <common/serial.h>
 
@@ -11,6 +12,17 @@ void dbg(string msg)
 void dbg(const string msg)
 {
     write_serial(msg);
+}
+
+void dbg_label(const string msg, const string col)
+{
+    dbg(col);
+    dbg(ANSI_BOLD);
+    dbg(" ");
+    dbg(msg);
+    dbg(" ");
+    dbg(ANSI_RESET);
+    dbg(" ");
 }
 
 void dbgc(char msg)
