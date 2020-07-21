@@ -1,5 +1,5 @@
 #pragma once
-#include <common/stdint.h>
+#include <stdint.h>
 
 uint8_t inb(uint16_t _port);
 

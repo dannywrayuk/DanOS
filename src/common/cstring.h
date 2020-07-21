@@ -1,5 +1,5 @@
 #pragma once
-#include <common/stddef.h>
+#include <stddef.h>
 
 #define string char *
 

@@ -1,6 +1,6 @@
 #pragma once
 #include <common/cstring.h>
-#include <common/stdint.h>
+#include <stdint.h>
 
 void dbg(const string msg);
 void dbg(string msg);

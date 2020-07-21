@@ -1,5 +1,5 @@
 #include <common/cstring.h>
-#include <common/stdint.h>
+#include <stdint.h>
 #include <logging/debug.h>
 
 #include <common/serial.h>

@@ -1,4 +1,4 @@
-#include <common/stdint.h>
+#include <stdint.h>
 #include <common/serial.h>
 #include <logging/debug.h>
 #include <logging/ansi_colours.h>
