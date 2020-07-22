@@ -4,7 +4,7 @@ HDSIZE=1G
 SRCDIR=src
 TEMPDIR=temp
 
-INCLUDE_TEST= false
+INCLUDE_TEST=yes
 
 CPU=i686
 AS= nasm
@@ -14,14 +14,15 @@ WARNINGS= #-Wall -Wextra
 ASFLAGS=-f elf32 -I$(SRCDIR)
 CFLAGS= -m32 -ffreestanding -std=c++11 -mno-red-zone -fno-exceptions -nostdlib -fno-rtti $(WARNINGS) -I$(SRCDIR)
 LFLAGS= -T $(SRCDIR)/link.ld
+BUILDDEFS=$(SRCDIR)/build/definitions.h
 
 QEMU=qemu-system-x86_64
 QEMUFLAGS= -m 2G -smp 4 -no-reboot -serial stdio -kernel $(KERNELBIN) -hda $(KERNELHD)
 
-ifeq ($(INCLUDE_TEST), false)
-CFILES= $(shell find $(SRCDIR) -type f -name '*.cpp' -not -path 'src/test/*')
-else
+ifeq ($(INCLUDE_TEST), yes)
 CFILES= $(shell find $(SRCDIR) -type f -name '*.cpp')
+else
+CFILES= $(shell find $(SRCDIR) -type f -name '*.cpp' -not -path 'src/test/*')
 endif
 
 ASMFILES= $(shell find $(SRCDIR) -type f -name '*.asm')
@@ -29,14 +30,25 @@ DEPFILES= $(addprefix $(TEMPDIR)/,$(CFILES:.cpp=.cpp.d))
 OBJ=$(addprefix $(TEMPDIR)/, $(CFILES:.cpp=.cpp.o) $(ASMFILES:.asm=.asm.o))
 
 
-.PHONY: all clean clean-hd new run
+.PHONY: all clean clean-hd clean-all new run
 
-all: $(KERNELBIN) run
+all: build-definitions $(KERNELBIN) run
+
+build-definitions:
+	@echo "Building optional definitions..."
+	@> $(BUILDDEFS)
+	@echo "#pragma once" > $(BUILDDEFS)
+ifeq ($(INCLUDE_TEST), yes)
+	@echo "Testing is on."
+	@echo "#define _BUILD_WITH_TEST" >> $(BUILDDEFS)
+endif
+	@echo "Done."
+
 
 $(KERNELBIN): $(OBJ)
-	@echo "Building: $(KERNELBIN)"
+	@echo -n "Building: $(KERNELBIN)"
 	@$(LD) $(OBJ) $(LFLAGS) -o $(KERNELBIN)
-	@echo "Done."
+	@echo "  ..Done."
 
 $(TEMPDIR)/%.cpp.o: %.cpp
 	@echo "Compiling: $<"
@@ -50,18 +62,20 @@ $(TEMPDIR)/%.asm.o: %.asm
 %.asm:
 
 $(KERNELHD):
-	qemu-img create -f qcow2 $(KERNELHD) $(HDSIZE)
+	@echo -n "Building HDD image..."
+	@qemu-img create -q -f qcow2 $(KERNELHD) $(HDSIZE)
+	@echo " ..Done."
 
 clean: 
-	@echo "Cleaning temporary files..."
+	@echo -n "Cleaning temporary files..."
 	@rm -f  $(OBJ) $(KERNELBIN) $(DEPFILES)
 	@rm -d -r -f temp
-	@echo "Done."
+	@echo "  ..Done."
 
 clean-hd:
-	@echo "Cleaning hard disk..."
+	@echo -n "Cleaning hard disk..."
 	@rm -f $(OBJ) $(KERNELHD)
-	@echo "Done."
+	@echo " ..Done."
 
 clean-all: clean clean-hd
 
