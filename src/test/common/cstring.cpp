@@ -2,7 +2,7 @@
 #include <common/cstring.h>
 #include <logging/debug.h>
 
-TEST_IMPLEMENT(memcpy)
+BEGIN_IMPLEMENT(memcpy)
 {
     struct
     {
@@ -16,7 +16,7 @@ TEST_IMPLEMENT(memcpy)
 
     if (strcmp(object.property1, property3) != 0)
     {
-        TEST_FAIL("memcpy:1: failed to copy string.");
+        TEST_FAIL("1: failed to copy string.");
     }
 
     object.property2 = 69;
@@ -24,13 +24,12 @@ TEST_IMPLEMENT(memcpy)
 
     if (object.property2 != object_copy.property2 && strcmp(object_copy.property1, property3) != 0)
     {
-        TEST_FAIL("memcpy:2: failed to copy structure.");
+        TEST_FAIL("2: failed to copy structure.");
     }
-
-    TEST_PASS;
 }
+END_IMPLEMENT
 
-TEST_IMPLEMENT(memmove)
+BEGIN_IMPLEMENT(memmove)
 {
     char str[] = "memmove can be very useful......";
     char result[] = "memmove can be very very useful.";
@@ -38,12 +37,12 @@ TEST_IMPLEMENT(memmove)
     memmove(str + 20, str + 15, 11);
     if (strcmp(str, result) != 0)
     {
-        TEST_FAIL("memmove:1: failed to move string.");
+        TEST_FAIL("1: failed to move string.");
     }
-    TEST_PASS;
 }
+END_IMPLEMENT
 
-TEST_IMPLEMENT(strcpy)
+BEGIN_IMPLEMENT(strcpy)
 {
     char str1[] = "Sample string";
     char str2[40];
@@ -53,20 +52,19 @@ TEST_IMPLEMENT(strcpy)
 
     if (strcmp(str1, str2) != 0)
     {
-        TEST_FAIL("strcpy1: failed to copy string.");
+        TEST_FAIL("1: failed to copy string.");
     }
 
     strcpy(str3, "copy successful");
 
     if (strcmp(str3, "copy successful") != 0)
     {
-        TEST_FAIL("strcpy:2: failed to copy string.");
+        TEST_FAIL("2: failed to copy string.");
     }
-
-    TEST_PASS;
 }
+END_IMPLEMENT
 
-TEST_IMPLEMENT(strncpy)
+BEGIN_IMPLEMENT(strncpy)
 {
     char str1[] = "To be or not to be";
     char str2[40];
@@ -76,7 +74,7 @@ TEST_IMPLEMENT(strncpy)
 
     if (strcmp(str1, str2) != 0)
     {
-        TEST_FAIL("strncpy:1: failed to copy string.");
+        TEST_FAIL("1: failed to copy string.");
     }
 
     strncpy(str3, str2, 5);
@@ -84,13 +82,12 @@ TEST_IMPLEMENT(strncpy)
 
     if (strcmp(str3, "To be") != 0)
     {
-        TEST_FAIL("strncpy:2: failed to copy string.");
+        TEST_FAIL("2: failed to copy string.");
     }
-
-    TEST_PASS;
 }
+END_IMPLEMENT
 
-TEST_IMPLEMENT(strcat)
+BEGIN_IMPLEMENT(strcat)
 {
     char str[80];
     strcpy(str, "these ");
@@ -100,13 +97,12 @@ TEST_IMPLEMENT(strcat)
 
     if (strcmp(str, "these strings are concatenated.") != 0)
     {
-        TEST_FAIL("strcat:1: failed to concatenate string.");
+        TEST_FAIL("1: failed to concatenate string.");
     }
-
-    TEST_PASS;
 }
+END_IMPLEMENT
 
-TEST_IMPLEMENT(strncat)
+BEGIN_IMPLEMENT(strncat)
 {
     char str1[20];
     char str2[20];
@@ -116,13 +112,12 @@ TEST_IMPLEMENT(strncat)
 
     if (strcmp(str1, "To be or not") != 0)
     {
-        TEST_FAIL("strncat:1: failed to concatenate string.");
+        TEST_FAIL("1: failed to concatenate string.");
     }
-
-    TEST_PASS;
 }
+END_IMPLEMENT
 
-TEST_IMPLEMENT(memcmp)
+BEGIN_IMPLEMENT(memcmp)
 {
     char buffer1[] = "DWgaOtP12df0";
     char buffer2[] = "DWGAOTP12DF0";
@@ -132,27 +127,26 @@ TEST_IMPLEMENT(memcmp)
 
     if (n <= 0)
     {
-        TEST_FAIL("memcmp:1: failed to compare greater memory.");
+        TEST_FAIL("1: failed to compare greater memory.");
     }
 
     n = memcmp(buffer2, buffer1, sizeof(buffer1));
 
     if (n >= 0)
     {
-        TEST_FAIL("memcmp:2: failed to compare lesser memory.");
+        TEST_FAIL("2: failed to compare lesser memory.");
     }
 
     n = memcmp(buffer1, buffer1, sizeof(buffer1));
 
     if (n != 0)
     {
-        TEST_FAIL("memcmp:3: failed to compare equal memory.");
+        TEST_FAIL("3: failed to compare equal memory.");
     }
-
-    TEST_PASS;
 }
+END_IMPLEMENT
 
-TEST_IMPLEMENT(strcmp)
+BEGIN_IMPLEMENT(strcmp)
 {
     char buffer1[] = "DWgaOtP12df0";
     char buffer2[] = "DWGAOTP12DF0";
@@ -162,25 +156,265 @@ TEST_IMPLEMENT(strcmp)
 
     if (n <= 0)
     {
-        TEST_FAIL("strcmp:1: failed to compare greater string.");
+        TEST_FAIL("1: failed to compare greater string.");
     }
 
     n = strcmp(buffer2, buffer1);
 
     if (n >= 0)
     {
-        TEST_FAIL("strcmp:2: failed to compare lesser string.");
+        TEST_FAIL("2: failed to compare lesser string.");
     }
 
     n = strcmp(buffer1, buffer1);
 
     if (n != 0)
     {
-        TEST_FAIL("strcmp:3: failed to compare equal string.");
+        TEST_FAIL("3: failed to compare equal string.");
+    }
+}
+END_IMPLEMENT
+
+BEGIN_IMPLEMENT(strcoll)
+{
+    char buffer1[] = "DWgaOtP12df0";
+    char buffer2[] = "DWGAOTP12DF0";
+    int n;
+
+    n = strcoll(buffer1, buffer2);
+
+    if (n <= 0)
+    {
+        TEST_FAIL("1: failed to compare greater string.");
     }
 
-    TEST_PASS;
+    n = strcoll(buffer2, buffer1);
+
+    if (n >= 0)
+    {
+        TEST_FAIL("2: failed to compare lesser string.");
+    }
+
+    n = strcoll(buffer1, buffer1);
+
+    if (n != 0)
+    {
+        TEST_FAIL("3: failed to compare equal string.");
+    }
 }
+END_IMPLEMENT
+
+BEGIN_IMPLEMENT(strncmp)
+{
+    char str[][5] = {"R2D2", "C3PO", "R2A6"};
+
+    if (strncmp(str[0], "R2xx", 2) != 0)
+    {
+        TEST_FAIL("1: didn't match string");
+    }
+
+    if (strncmp(str[1], "R2xx", 2) == 0)
+    {
+        TEST_FAIL("2: matched incorrect string");
+    }
+
+    if (strncmp(str[2], "R2xx", 2) != 0)
+    {
+        TEST_FAIL("3: didn't match string");
+    }
+}
+END_IMPLEMENT
+
+BEGIN_IMPLEMENT(strxfrm)
+{
+    char src[15], dest[15];
+    int len;
+    strcpy(src, "hellothere");
+    len = strxfrm(dest, src, 11);
+
+    if (len != 10)
+    {
+        TEST_FAIL("1: length is incorrect");
+    }
+
+    if (strcmp(dest, "hellothere") != 0)
+    {
+        TEST_FAIL("2: didn't copy string");
+    }
+}
+END_IMPLEMENT
+
+BEGIN_IMPLEMENT(memchr)
+{
+    const string s1 = "";
+    const string s2 = "abcdefabcdef";
+    const string s3 = "11111111111111111111";
+
+    if (memchr(s1, 'x', 0) != NULL)
+    {
+        TEST_FAIL("1: found absent char");
+    }
+
+    if (memchr(s2, 'y', 0) != NULL)
+    {
+        TEST_FAIL("2: found absent char");
+    }
+
+    if ((char *)memchr(s2, 'a', 1) - s2 != 0)
+    {
+        TEST_FAIL("3: found absent char");
+    }
+
+    if (memchr(s2, 'd', 2) != NULL)
+    {
+        TEST_FAIL("4: found absent char");
+    }
+
+    if ((char *)memchr(s2, 'd', 12) - s2 != 3)
+    {
+        TEST_FAIL("5: didn't find char");
+    }
+
+    if ((char *)memchr(s2, 'f', 12) - s2 != 5)
+    {
+        TEST_FAIL("6: didn't find char");
+    }
+
+    if ((char *)memchr(s3, '1', 20) - s3 != 0)
+    {
+        TEST_FAIL("7: found absent char");
+    }
+}
+END_IMPLEMENT
+
+BEGIN_IMPLEMENT(strchr)
+{
+    char str[] = "This is a sample string";
+    int locations[4] = {4, 7, 11, 18};
+    char *pch;
+    pch = strchr(str, 's');
+    for (int i = 0; pch != NULL; i++)
+    {
+        if ((int)(pch - str + 1) != locations[i])
+        {
+            TEST_FAIL("1: incorrect char location");
+        }
+        pch = strchr(pch + 1, 's');
+    }
+}
+END_IMPLEMENT
+
+BEGIN_IMPLEMENT(strcspn)
+{
+    char str[] = "fcba73";
+    char keys[] = "1234567890";
+    if (strcspn(str, keys) != 4)
+    {
+        TEST_FAIL("1: span incorrect length");
+    }
+}
+END_IMPLEMENT
+
+BEGIN_IMPLEMENT(strpbrk)
+{
+    char str[] = "This is a sample string";
+    char key[] = "aeiou";
+    const string vowels = "iiaaei";
+    char *pch;
+    pch = strpbrk(str, key);
+    for (int i = 0; pch != NULL; i++)
+    {
+        if (*pch != vowels[i])
+        {
+            TEST_FAIL("1: incorrect char location");
+        }
+        pch = strpbrk(pch + 1, key);
+    }
+}
+END_IMPLEMENT
+
+BEGIN_IMPLEMENT(strrchr)
+{
+    char str[] = "This is a sample string";
+
+    if ((int)(strrchr(str, 's') - str + 1) != 18)
+    {
+        TEST_FAIL("1: incorrect char location");
+    }
+}
+END_IMPLEMENT
+
+BEGIN_IMPLEMENT(strspn)
+{
+    char strtext[] = "129th";
+    char cset[] = "1234567890";
+    if (strspn(strtext, cset) != 3)
+    {
+        TEST_FAIL("1: incorrect span length");
+    }
+}
+END_IMPLEMENT
+
+BEGIN_IMPLEMENT(strstr)
+{
+    char str[] = "This is a simple string";
+    if ((int)(strstr(str, "simple") - str + 1) != 11)
+    {
+        TEST_FAIL("1: incorrect start location");
+    }
+}
+END_IMPLEMENT
+
+BEGIN_IMPLEMENT(strtok)
+{
+    char str[] = "- This, a sample string.";
+    char *pch;
+    const string tokens[] = {"This", "a", "sample", "string"};
+    pch = strtok(str, " ,.-");
+    for (int i = 0; pch != NULL; i++)
+    {
+        if (strcmp(pch, tokens[i]) != 0)
+        {
+            TEST_FAIL("1: didn't match token");
+        }
+        pch = strtok(NULL, " ,.-");
+    }
+}
+END_IMPLEMENT
+
+BEGIN_IMPLEMENT(memset)
+{
+    char str[] = "almost every programmer should know memset!";
+    memset(str, '-', 6);
+    if (strcmp(str, "------ every programmer should know memset!") != 0)
+    {
+        TEST_FAIL("1: memory was set incorrectly");
+    }
+}
+END_IMPLEMENT
+
+BEGIN_IMPLEMENT(strerror)
+{
+    // Not required
+}
+END_IMPLEMENT
+
+BEGIN_IMPLEMENT(strlen)
+{
+    char str1[] = "almost every programmer should know memset!";
+    char str2[] = "";
+
+    if (strlen(str1) != 43)
+    {
+        TEST_FAIL("1: incorrect length");
+    }
+
+    if (strlen(str2) != 0)
+    {
+        TEST_FAIL("1: incorrect length empty string");
+    }
+}
+END_IMPLEMENT
 
 BEGIN_TESTS(cstring)
 {
@@ -192,5 +426,19 @@ BEGIN_TESTS(cstring)
     TEST(strncat);
     TEST(memcmp);
     TEST(strcmp);
+    TEST(strcoll)
+    TEST(strncmp);
+    TEST(strxfrm);
+    TEST(memchr);
+    TEST(strchr);
+    TEST(strcspn);
+    TEST(strpbrk);
+    TEST(strrchr);
+    TEST(strspn);
+    TEST(strstr);
+    TEST(strtok);
+    TEST(memset);
+    TEST(strerror)
+    TEST(strlen)
 }
 END_TESTS

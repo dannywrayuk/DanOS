@@ -3,11 +3,19 @@
 #include <logging/debug.h>
 #include <logging/ansi_colours.h>
 
-string reason;
+string test_name;
+
+void fail_message()
+{
+}
 
 void fail_message(const string msg)
 {
-    reason = (char *)msg;
+    LABEL_FAIL;
+    LABEL_REASON;
+    dbg(test_name);
+    dbg(msg);
+    endl();
 }
 
 void test_debug_message(const string msg)
@@ -17,23 +25,15 @@ void test_debug_message(const string msg)
     endl();
 }
 
-int test(int passing, const string name)
+int test(int (*function)(), const string name)
 {
-    if (passing)
-    {
-        LABEL_PASS;
-        dbg(name);
-        endl();
-    }
-    else
-    {
-        LABEL_FAIL;
-        dbg(name);
-        endl();
-        LABEL_REASON;
-        dbg(reason);
-        endl();
-    }
+    test_name = (string)name;
+    int passing = function();
+    passing
+        ? LABEL_PASS
+        : LABEL_FAIL;
+    dbg(name);
+    endl();
     return passing;
 }
 
