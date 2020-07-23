@@ -4,7 +4,7 @@ HDSIZE=1G
 SRCDIR=src
 TEMPDIR=temp
 
-INCLUDE_TEST=yes
+testing=off
 
 CPU=i686
 AS= nasm
@@ -19,7 +19,7 @@ BUILDDEFS=$(SRCDIR)/build/definitions.h
 QEMU=qemu-system-x86_64
 QEMUFLAGS= -m 2G -smp 4 -no-reboot -serial stdio -kernel $(KERNELBIN) -hda $(KERNELHD)
 
-ifeq ($(INCLUDE_TEST), yes)
+ifeq ($(testing), on)
 CFILES= $(shell find $(SRCDIR) -type f -name '*.cpp')
 else
 CFILES= $(shell find $(SRCDIR) -type f -name '*.cpp' -not -path 'src/test/*')
@@ -38,12 +38,11 @@ build-definitions:
 	@echo "Building optional definitions..."
 	@> $(BUILDDEFS)
 	@echo "#pragma once" > $(BUILDDEFS)
-ifeq ($(INCLUDE_TEST), yes)
+ifeq ($(testing), on)
 	@echo "Testing is on."
 	@echo "#define _BUILD_WITH_TEST" >> $(BUILDDEFS)
 endif
 	@echo "Done."
-
 
 $(KERNELBIN): $(OBJ)
 	@echo -n "Building: $(KERNELBIN)"

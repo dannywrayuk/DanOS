@@ -12,17 +12,17 @@ BEGIN_IMPLEMENT(memcpy)
 
     char property3[16] = "dannywray.co.uk";
 
-    memcpy(object.property1, property3, 16);
+    std::memcpy(object.property1, property3, 16);
 
-    if (strcmp(object.property1, property3) != 0)
+    if (std::strcmp(object.property1, property3) != 0)
     {
         TEST_FAIL("1: failed to copy string.");
     }
 
     object.property2 = 69;
-    memcpy(&object_copy, &object, sizeof(object));
+    std::memcpy(&object_copy, &object, sizeof(object));
 
-    if (object.property2 != object_copy.property2 && strcmp(object_copy.property1, property3) != 0)
+    if (object.property2 != object_copy.property2 && std::strcmp(object_copy.property1, property3) != 0)
     {
         TEST_FAIL("2: failed to copy structure.");
     }
@@ -34,8 +34,8 @@ BEGIN_IMPLEMENT(memmove)
     char str[] = "memmove can be very useful......";
     char result[] = "memmove can be very very useful.";
 
-    memmove(str + 20, str + 15, 11);
-    if (strcmp(str, result) != 0)
+    std::memmove(str + 20, str + 15, 11);
+    if (std::strcmp(str, result) != 0)
     {
         TEST_FAIL("1: failed to move string.");
     }
@@ -48,16 +48,16 @@ BEGIN_IMPLEMENT(strcpy)
     char str2[40];
     char str3[40];
 
-    strcpy(str2, str1);
+    std::strcpy(str2, str1);
 
-    if (strcmp(str1, str2) != 0)
+    if (std::strcmp(str1, str2) != 0)
     {
         TEST_FAIL("1: failed to copy string.");
     }
 
-    strcpy(str3, "copy successful");
+    std::strcpy(str3, "copy successful");
 
-    if (strcmp(str3, "copy successful") != 0)
+    if (std::strcmp(str3, "copy successful") != 0)
     {
         TEST_FAIL("2: failed to copy string.");
     }
@@ -70,17 +70,17 @@ BEGIN_IMPLEMENT(strncpy)
     char str2[40];
     char str3[40];
 
-    strncpy(str2, str1, sizeof(str2));
+    std::strncpy(str2, str1, sizeof(str2));
 
-    if (strcmp(str1, str2) != 0)
+    if (std::strcmp(str1, str2) != 0)
     {
         TEST_FAIL("1: failed to copy string.");
     }
 
-    strncpy(str3, str2, 5);
+    std::strncpy(str3, str2, 5);
     str3[5] = '\0';
 
-    if (strcmp(str3, "To be") != 0)
+    if (std::strcmp(str3, "To be") != 0)
     {
         TEST_FAIL("2: failed to copy string.");
     }
@@ -90,12 +90,12 @@ END_IMPLEMENT
 BEGIN_IMPLEMENT(strcat)
 {
     char str[80];
-    strcpy(str, "these ");
-    strcat(str, "strings ");
-    strcat(str, "are ");
-    strcat(str, "concatenated.");
+    std::strcpy(str, "these ");
+    std::strcat(str, "strings ");
+    std::strcat(str, "are ");
+    std::strcat(str, "concatenated.");
 
-    if (strcmp(str, "these strings are concatenated.") != 0)
+    if (std::strcmp(str, "these strings are concatenated.") != 0)
     {
         TEST_FAIL("1: failed to concatenate string.");
     }
@@ -106,11 +106,11 @@ BEGIN_IMPLEMENT(strncat)
 {
     char str1[20];
     char str2[20];
-    strcpy(str1, "To be ");
-    strcpy(str2, "or not to be");
-    strncat(str1, str2, 6);
+    std::strcpy(str1, "To be ");
+    std::strcpy(str2, "or not to be");
+    std::strncat(str1, str2, 6);
 
-    if (strcmp(str1, "To be or not") != 0)
+    if (std::strcmp(str1, "To be or not") != 0)
     {
         TEST_FAIL("1: failed to concatenate string.");
     }
@@ -123,21 +123,21 @@ BEGIN_IMPLEMENT(memcmp)
     char buffer2[] = "DWGAOTP12DF0";
     int n;
 
-    n = memcmp(buffer1, buffer2, sizeof(buffer1));
+    n = std::memcmp(buffer1, buffer2, sizeof(buffer1));
 
     if (n <= 0)
     {
         TEST_FAIL("1: failed to compare greater memory.");
     }
 
-    n = memcmp(buffer2, buffer1, sizeof(buffer1));
+    n = std::memcmp(buffer2, buffer1, sizeof(buffer1));
 
     if (n >= 0)
     {
         TEST_FAIL("2: failed to compare lesser memory.");
     }
 
-    n = memcmp(buffer1, buffer1, sizeof(buffer1));
+    n = std::memcmp(buffer1, buffer1, sizeof(buffer1));
 
     if (n != 0)
     {
@@ -152,21 +152,21 @@ BEGIN_IMPLEMENT(strcmp)
     char buffer2[] = "DWGAOTP12DF0";
     int n;
 
-    n = strcmp(buffer1, buffer2);
+    n = std::strcmp(buffer1, buffer2);
 
     if (n <= 0)
     {
         TEST_FAIL("1: failed to compare greater string.");
     }
 
-    n = strcmp(buffer2, buffer1);
+    n = std::strcmp(buffer2, buffer1);
 
     if (n >= 0)
     {
         TEST_FAIL("2: failed to compare lesser string.");
     }
 
-    n = strcmp(buffer1, buffer1);
+    n = std::strcmp(buffer1, buffer1);
 
     if (n != 0)
     {
@@ -181,21 +181,21 @@ BEGIN_IMPLEMENT(strcoll)
     char buffer2[] = "DWGAOTP12DF0";
     int n;
 
-    n = strcoll(buffer1, buffer2);
+    n = std::strcoll(buffer1, buffer2);
 
     if (n <= 0)
     {
         TEST_FAIL("1: failed to compare greater string.");
     }
 
-    n = strcoll(buffer2, buffer1);
+    n = std::strcoll(buffer2, buffer1);
 
     if (n >= 0)
     {
         TEST_FAIL("2: failed to compare lesser string.");
     }
 
-    n = strcoll(buffer1, buffer1);
+    n = std::strcoll(buffer1, buffer1);
 
     if (n != 0)
     {
@@ -208,17 +208,17 @@ BEGIN_IMPLEMENT(strncmp)
 {
     char str[][5] = {"R2D2", "C3PO", "R2A6"};
 
-    if (strncmp(str[0], "R2xx", 2) != 0)
+    if (std::strncmp(str[0], "R2xx", 2) != 0)
     {
         TEST_FAIL("1: didn't match string");
     }
 
-    if (strncmp(str[1], "R2xx", 2) == 0)
+    if (std::strncmp(str[1], "R2xx", 2) == 0)
     {
         TEST_FAIL("2: matched incorrect string");
     }
 
-    if (strncmp(str[2], "R2xx", 2) != 0)
+    if (std::strncmp(str[2], "R2xx", 2) != 0)
     {
         TEST_FAIL("3: didn't match string");
     }
@@ -229,15 +229,15 @@ BEGIN_IMPLEMENT(strxfrm)
 {
     char src[15], dest[15];
     int len;
-    strcpy(src, "hellothere");
-    len = strxfrm(dest, src, 11);
+    std::strcpy(src, "hellothere");
+    len = std::strxfrm(dest, src, 11);
 
     if (len != 10)
     {
         TEST_FAIL("1: length is incorrect");
     }
 
-    if (strcmp(dest, "hellothere") != 0)
+    if (std::strcmp(dest, "hellothere") != 0)
     {
         TEST_FAIL("2: didn't copy string");
     }
@@ -250,37 +250,37 @@ BEGIN_IMPLEMENT(memchr)
     const string s2 = "abcdefabcdef";
     const string s3 = "11111111111111111111";
 
-    if (memchr(s1, 'x', 0) != NULL)
+    if (std::memchr(s1, 'x', 0) != NULL)
     {
         TEST_FAIL("1: found absent char");
     }
 
-    if (memchr(s2, 'y', 0) != NULL)
+    if (std::memchr(s2, 'y', 0) != NULL)
     {
         TEST_FAIL("2: found absent char");
     }
 
-    if ((char *)memchr(s2, 'a', 1) - s2 != 0)
+    if ((char *)std::memchr(s2, 'a', 1) - s2 != 0)
     {
         TEST_FAIL("3: found absent char");
     }
 
-    if (memchr(s2, 'd', 2) != NULL)
+    if (std::memchr(s2, 'd', 2) != NULL)
     {
         TEST_FAIL("4: found absent char");
     }
 
-    if ((char *)memchr(s2, 'd', 12) - s2 != 3)
+    if ((char *)std::memchr(s2, 'd', 12) - s2 != 3)
     {
         TEST_FAIL("5: didn't find char");
     }
 
-    if ((char *)memchr(s2, 'f', 12) - s2 != 5)
+    if ((char *)std::memchr(s2, 'f', 12) - s2 != 5)
     {
         TEST_FAIL("6: didn't find char");
     }
 
-    if ((char *)memchr(s3, '1', 20) - s3 != 0)
+    if ((char *)std::memchr(s3, '1', 20) - s3 != 0)
     {
         TEST_FAIL("7: found absent char");
     }
@@ -292,14 +292,14 @@ BEGIN_IMPLEMENT(strchr)
     char str[] = "This is a sample string";
     int locations[4] = {4, 7, 11, 18};
     char *pch;
-    pch = strchr(str, 's');
+    pch = std::strchr(str, 's');
     for (int i = 0; pch != NULL; i++)
     {
         if ((int)(pch - str + 1) != locations[i])
         {
             TEST_FAIL("1: incorrect char location");
         }
-        pch = strchr(pch + 1, 's');
+        pch = std::strchr(pch + 1, 's');
     }
 }
 END_IMPLEMENT
@@ -308,7 +308,7 @@ BEGIN_IMPLEMENT(strcspn)
 {
     char str[] = "fcba73";
     char keys[] = "1234567890";
-    if (strcspn(str, keys) != 4)
+    if (std::strcspn(str, keys) != 4)
     {
         TEST_FAIL("1: span incorrect length");
     }
@@ -321,14 +321,14 @@ BEGIN_IMPLEMENT(strpbrk)
     char key[] = "aeiou";
     const string vowels = "iiaaei";
     char *pch;
-    pch = strpbrk(str, key);
+    pch = std::strpbrk(str, key);
     for (int i = 0; pch != NULL; i++)
     {
         if (*pch != vowels[i])
         {
             TEST_FAIL("1: incorrect char location");
         }
-        pch = strpbrk(pch + 1, key);
+        pch = std::strpbrk(pch + 1, key);
     }
 }
 END_IMPLEMENT
@@ -337,7 +337,7 @@ BEGIN_IMPLEMENT(strrchr)
 {
     char str[] = "This is a sample string";
 
-    if ((int)(strrchr(str, 's') - str + 1) != 18)
+    if ((int)(std::strrchr(str, 's') - str + 1) != 18)
     {
         TEST_FAIL("1: incorrect char location");
     }
@@ -348,7 +348,7 @@ BEGIN_IMPLEMENT(strspn)
 {
     char strtext[] = "129th";
     char cset[] = "1234567890";
-    if (strspn(strtext, cset) != 3)
+    if (std::strspn(strtext, cset) != 3)
     {
         TEST_FAIL("1: incorrect span length");
     }
@@ -358,7 +358,7 @@ END_IMPLEMENT
 BEGIN_IMPLEMENT(strstr)
 {
     char str[] = "This is a simple string";
-    if ((int)(strstr(str, "simple") - str + 1) != 11)
+    if ((int)(std::strstr(str, "simple") - str + 1) != 11)
     {
         TEST_FAIL("1: incorrect start location");
     }
@@ -370,14 +370,14 @@ BEGIN_IMPLEMENT(strtok)
     char str[] = "- This, a sample string.";
     char *pch;
     const string tokens[] = {"This", "a", "sample", "string"};
-    pch = strtok(str, " ,.-");
+    pch = std::strtok(str, " ,.-");
     for (int i = 0; pch != NULL; i++)
     {
-        if (strcmp(pch, tokens[i]) != 0)
+        if (std::strcmp(pch, tokens[i]) != 0)
         {
             TEST_FAIL("1: didn't match token");
         }
-        pch = strtok(NULL, " ,.-");
+        pch = std::strtok(NULL, " ,.-");
     }
 }
 END_IMPLEMENT
@@ -385,8 +385,8 @@ END_IMPLEMENT
 BEGIN_IMPLEMENT(memset)
 {
     char str[] = "almost every programmer should know memset!";
-    memset(str, '-', 6);
-    if (strcmp(str, "------ every programmer should know memset!") != 0)
+    std::memset(str, '-', 6);
+    if (std::strcmp(str, "------ every programmer should know memset!") != 0)
     {
         TEST_FAIL("1: memory was set incorrectly");
     }
@@ -404,12 +404,12 @@ BEGIN_IMPLEMENT(strlen)
     char str1[] = "almost every programmer should know memset!";
     char str2[] = "";
 
-    if (strlen(str1) != 43)
+    if (std::strlen(str1) != 43)
     {
         TEST_FAIL("1: incorrect length");
     }
 
-    if (strlen(str2) != 0)
+    if (std::strlen(str2) != 0)
     {
         TEST_FAIL("1: incorrect length empty string");
     }
