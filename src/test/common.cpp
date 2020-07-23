@@ -1,5 +1,5 @@
 #include <test/test.h>
-#include <test/common/cstring.h>
+#include <test/common/std/cstring.h>
 
 BEGIN_TESTS(common)
 {

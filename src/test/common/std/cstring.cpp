@@ -1,5 +1,5 @@
 #include <test/test.h>
-#include <common/cstring.h>
+#include <common/std/cstring.h>
 #include <logging/debug.h>
 
 BEGIN_IMPLEMENT(memcpy)

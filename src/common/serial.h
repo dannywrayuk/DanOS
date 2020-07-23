@@ -1,5 +1,5 @@
 #pragma once
-#include <common/cstring.h>
+#include <common/std/cstring.h>
 
 #define COMPORT1 0x3f8
 

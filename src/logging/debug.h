@@ -1,5 +1,5 @@
 #pragma once
-#include <common/cstring.h>
+#include <common/std/cstring.h>
 #include <stdint.h>
 
 void dbg(const string msg);
