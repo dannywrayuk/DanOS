@@ -25,13 +25,44 @@ void test_debug_message(const string msg)
     endl();
 }
 
-int test(int (*function)(), const string name)
+int test(int (*function)(int), const string name, int depth)
+{
+    test_name = (string)name;
+    int passing = function(depth);
+    passing
+        ? LABEL_PASS
+        : LABEL_FAIL;
+
+#ifdef PRETTY_TEST
+    char buffer[128] = {};
+    for (; depth - 1; depth--)
+    {
+        std::strcat(buffer, "│  ");
+    }
+    std::strcat(buffer, "├──");
+    dbg(buffer);
+#endif
+    dbg(name);
+    endl();
+    return passing;
+}
+
+int test(int (*function)(), const string name, int depth)
 {
     test_name = (string)name;
     int passing = function();
     passing
         ? LABEL_PASS
         : LABEL_FAIL;
+#ifdef PRETTY_TEST
+    char buffer[128] = {};
+    for (; depth - 1; depth--)
+    {
+        std::strcat(buffer, "│  ");
+    }
+    std::strcat(buffer, "┌──");
+    dbg(buffer);
+#endif
     dbg(name);
     endl();
     return passing;
@@ -50,7 +81,9 @@ int complete(int result, const string name)
     {
         endl();
         LABEL_FAIL;
+        dbg("when running ");
         LABEL_OTHER(name);
+        dbg("tests.");
         endl();
     }
     return result;

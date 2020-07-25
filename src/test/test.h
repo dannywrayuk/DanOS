@@ -1,10 +1,13 @@
 #pragma once
 #include <common/std/cstring.h>
 
-#define TEST(name)                           \
-    if (!test(&name##_test_function, #name)) \
-    {                                        \
-        pass = 0;                            \
+// large debug output causes crash, turn off to prevent
+// #define PRETTY_TEST
+
+#define TEST(name)                                  \
+    if (!test(&name##_test_function, #name, depth)) \
+    {                                               \
+        pass = 0;                                   \
     }
 
 #define BEGIN_IMPLEMENT(name)  \
@@ -16,9 +19,10 @@
     return pass;      \
     }
 
-#define BEGIN_TESTS(name)      \
-    int name##_test_function() \
-    {                          \
+#define BEGIN_TESTS(name)               \
+    int name##_test_function(int depth) \
+    {                                   \
+        depth++;                        \
         int pass = 1;
 
 #define END_TESTS \
@@ -30,10 +34,10 @@
     pass = 0
 
 #define TEST_ENTRY(name) \
-    int test_##name() { return complete(name##_test_function(), #name); }
+    int test_##name() { return complete(name##_test_function(0), #name); }
 
-#define DEFINE_TEST_FUNCTIONS(name) \
-    int name##_test_function();     \
+#define DEFINE_TEST_FUNCTIONS(name)      \
+    int name##_test_function(int depth); \
     int test_##name();
 
 #define TEST_DEBUG(msg) test_debug_message(msg)
@@ -47,5 +51,6 @@
 void fail_message(const string msg);
 void fail_message();
 void test_debug_message(const string msg);
-int test(int (*function)(), const string name);
+int test(int (*function)(int), const string name, int depth);
+int test(int (*function)(), const string name, int depth);
 int complete(int result, const string name);
