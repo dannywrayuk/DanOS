@@ -3,13 +3,13 @@
 #include <logging/debug.h>
 #include <logging/ansi_colours.h>
 
-string test_name;
+char *test_name;
 
 void fail_message()
 {
 }
 
-void fail_message(const string msg)
+void fail_message(const char *msg)
 {
     LABEL_FAIL;
     LABEL_REASON;
@@ -18,16 +18,16 @@ void fail_message(const string msg)
     endl();
 }
 
-void test_debug_message(const string msg)
+void test_debug_message(const char *msg)
 {
     LABEL_DEBUG;
     dbg(msg);
     endl();
 }
 
-int test(int (*function)(int), const string name, int depth)
+int test(int (*function)(int), const char *name, int depth)
 {
-    test_name = (string)name;
+    test_name = (char *)name;
     int passing = function(depth);
     passing
         ? LABEL_PASS
@@ -47,9 +47,9 @@ int test(int (*function)(int), const string name, int depth)
     return passing;
 }
 
-int test(int (*function)(), const string name, int depth)
+int test(int (*function)(), const char *name, int depth)
 {
-    test_name = (string)name;
+    test_name = (char *)name;
     int passing = function();
     passing
         ? LABEL_PASS
@@ -68,7 +68,7 @@ int test(int (*function)(), const string name, int depth)
     return passing;
 }
 
-int complete(int result, const string name)
+int complete(int result, const char *name)
 {
     if (result)
     {

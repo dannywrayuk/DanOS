@@ -2,9 +2,9 @@
 #include <common/std/cstring.h>
 #include <stdint.h>
 
-void dbg(const string msg);
-void dbg(string msg);
-void dbg_label(const string msg, const string col);
+void dbg(const char *msg);
+void dbg(char *msg);
+void dbg_label(const char *msg, const char *col);
 void dbgc(char msg);
 // void dbg(uint32_t msg);
 void endl();

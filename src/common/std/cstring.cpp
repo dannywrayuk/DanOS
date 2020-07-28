@@ -26,7 +26,7 @@ namespace std
         return destination;
     }
 
-    string strcpy(string destination, const string source)
+    char *strcpy(char *destination, const char *source)
     {
         char *ret = destination;
         while (*destination++ = *source++)
@@ -34,7 +34,7 @@ namespace std
         return ret;
     }
 
-    string strncpy(string destination, const string source, size_t num)
+    char *strncpy(char *destination, const char *source, size_t num)
     {
         char *ret = destination;
         do
@@ -47,7 +47,7 @@ namespace std
         return ret;
     }
 
-    string strcat(string destination, const string source)
+    char *strcat(char *destination, const char *source)
     {
         int i, j;
 
@@ -62,7 +62,7 @@ namespace std
         return destination;
     }
 
-    string strncat(string destination, const string source, size_t num)
+    char *strncat(char *destination, const char *source, size_t num)
     {
         int i, j;
 
@@ -79,8 +79,8 @@ namespace std
 
     int memcmp(const void *ptr1, const void *ptr2, size_t num)
     {
-        const string p1 = (const string)ptr1;
-        const string p2 = (const string)ptr2;
+        const char *p1 = (const char *)ptr1;
+        const char *p2 = (const char *)ptr2;
 
         while (num-- > 0)
         {
@@ -90,7 +90,7 @@ namespace std
         return 0;
     }
 
-    int strcmp(const string str1, const string str2)
+    int strcmp(const char *str1, const char *str2)
     {
         for (int i = 0;; i++)
         {
@@ -106,12 +106,12 @@ namespace std
         }
     }
 
-    int strcoll(const string str1, const string str2)
+    int strcoll(const char *str1, const char *str2)
     {
         return strcmp(str1, str2);
     }
 
-    int strncmp(const string str1, const string str2, size_t num)
+    int strncmp(const char *str1, const char *str2, size_t num)
     {
         for (int i = 0; i < num; i++)
         {
@@ -128,7 +128,7 @@ namespace std
         return 0;
     }
 
-    size_t strxfrm(string destination, const string source, size_t num)
+    size_t strxfrm(char *destination, const char *source, size_t num)
     {
         strncpy(destination, source, num);
         return strlen(source);
@@ -136,7 +136,7 @@ namespace std
 
     const void *memchr(const void *ptr, int value, size_t num)
     {
-        unsigned string p = (unsigned string)ptr;
+        unsigned char *p = (unsigned char *)ptr;
         while (num--)
             if (*p != (unsigned char)value)
                 p++;
@@ -147,7 +147,7 @@ namespace std
 
     void *memchr(void *ptr, int value, size_t num)
     {
-        unsigned string p = (unsigned string)ptr;
+        unsigned char *p = (unsigned char *)ptr;
         while (num--)
             if (*p != (unsigned char)value)
                 p++;
@@ -156,23 +156,23 @@ namespace std
         return 0;
     }
 
-    const string strchr(const string str, int character)
+    const char *strchr(const char *str, int character)
     {
         while (*str != (char)character)
             if (!*str++)
                 return 0;
-        return (string)str;
+        return (char *)str;
     }
 
-    string strchr(string str, int character)
+    char *strchr(char *str, int character)
     {
         while (*str != (char)character)
             if (!*str++)
                 return 0;
-        return (string)str;
+        return (char *)str;
     }
 
-    size_t strcspn(const string str1, const string str2)
+    size_t strcspn(const char *str1, const char *str2)
     {
         size_t ret = 0;
         while (*str1)
@@ -183,36 +183,36 @@ namespace std
         return ret;
     }
 
-    const string strpbrk(const string str1, const string str2)
+    const char *strpbrk(const char *str1, const char *str2)
     {
         while (*str1)
             if (strchr(str2, *str1++))
-                return (string)--str1;
+                return (char *)--str1;
         return 0;
     }
 
-    string strpbrk(string str1, const string str2)
+    char *strpbrk(char *str1, const char *str2)
     {
         while (*str1)
             if (strchr(str2, *str1++))
-                return (string)--str1;
+                return (char *)--str1;
         return 0;
     }
 
-    const string strrchr(const string str, int character)
+    const char *strrchr(const char *str, int character)
     {
-        string ret = 0;
+        char *ret = 0;
         do
         {
             if (*str == (char)character)
-                ret = (string)str;
+                ret = (char *)str;
         } while (*str++);
         return ret;
     }
 
-    string strrchr(string str, int character)
+    char *strrchr(char *str, int character)
     {
-        string ret = 0;
+        char *ret = 0;
         do
         {
             if (*str == (char)character)
@@ -221,7 +221,7 @@ namespace std
         return ret;
     }
 
-    size_t strspn(const string str1, const string str2)
+    size_t strspn(const char *str1, const char *str2)
     {
         size_t ret = 0;
         while (*str1 && strchr(str2, *str1++))
@@ -229,7 +229,7 @@ namespace std
         return ret;
     }
 
-    const string strstr(const string str1, const string str2)
+    const char *strstr(const char *str1, const char *str2)
     {
         size_t n = strlen(str2);
         while (*str1)
@@ -238,7 +238,7 @@ namespace std
         return 0;
     }
 
-    string strstr(string str1, const string str2)
+    char *strstr(char *str1, const char *str2)
     {
         size_t n = strlen(str2);
         while (*str1)
@@ -247,9 +247,9 @@ namespace std
         return 0;
     }
 
-    string strtok(string str, const string delimiters)
+    char *strtok(char *str, const char *delimiters)
     {
-        string p = 0;
+        char *p = 0;
         if (str)
             p = str;
         else if (!p)
@@ -264,15 +264,15 @@ namespace std
 
     void *memset(void *ptr, int value, size_t num)
     {
-        unsigned string p = (unsigned string)ptr;
+        unsigned char *p = (unsigned char *)ptr;
         while (num--)
             *p++ = (unsigned char)value;
         return p;
     }
 
-    string strerror(int errnum)
+    char *strerror(int errnum)
     {
-        const string sys_errlist[] = {
+        const char *sys_errlist[] = {
             "Operation succeeded",
             "Invalid argument",
             "Bad memory address",
@@ -301,10 +301,10 @@ namespace std
             "Argument list too long",
             "Bad file number",
         };
-        return (string)sys_errlist[errnum];
+        return (char *)sys_errlist[errnum];
     }
 
-    size_t strlen(const string str)
+    size_t strlen(const char *str)
     {
         size_t i;
         for (i = 0; str[i] != '\0'; i++)

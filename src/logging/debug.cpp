@@ -5,16 +5,16 @@
 
 #include <common/serial.h>
 
-void dbg(string msg)
+void dbg(char *msg)
 {
     write_serial(msg);
 }
-void dbg(const string msg)
+void dbg(const char *msg)
 {
     write_serial(msg);
 }
 
-void dbg_label(const string msg, const string col)
+void dbg_label(const char *msg, const char *col)
 {
     dbg(col);
     dbg(ANSI_BOLD);

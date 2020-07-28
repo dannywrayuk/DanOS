@@ -1,8 +1,6 @@
 #pragma once
 #include <stddef.h>
 
-#define string char *
-
 namespace std
 {
     // Copying
@@ -18,23 +16,23 @@ namespace std
 
     // Copy string
     // Copies the C string pointed by source into the array pointed by destination, including the terminating null character (and stopping at that point).
-    string strcpy(string destination, const string source);
+    char *strcpy(char *destination, const char *source);
 
     // Copy characters from string
     // Copies the first num characters of source to destination.
     // If the end of the source C string (which is signaled by a null-character) is found before num characters have been copied, destination is padded with zeros until a total of num characters have been written to it.
-    string strncpy(string destination, const string source, size_t num);
+    char *strncpy(char *destination, const char *source, size_t num);
 
     // Concatenation
 
     // Concatenate strings
     // Appends a copy of the source string to the destination string.
     // The terminating null character in destination is overwritten by the first character of source, and a null-character is included at the end of the new string formed by the concatenation of both in destination.
-    string strcat(string destination, const string source);
+    char *strcat(char *destination, const char *source);
 
     // Append characters from string
     // Appends the first num characters of source to destination, plus a terminating null-character.
-    string strncat(string destination, const string source, size_t num);
+    char *strncat(char *destination, const char *source, size_t num);
 
     // Comparison
 
@@ -43,21 +41,21 @@ namespace std
     int memcmp(const void *ptr1, const void *ptr2, size_t num);
 
     // Compare two strings
-    // Compares the C string str1 to the C string str2.
+    // Compares the C char * str1 to the C char * str2.
     int strcmp(const char *str1, const char *str2);
 
     // Compare two strings using locale
-    // Compares the C string str1 to the C string str2, both interpreted appropriately according to the LC_COLLATE category of the C locale currently selected.
+    // Compares the C char * str1 to the C char * str2, both interpreted appropriately according to the LC_COLLATE category of the C locale currently selected.
     // Only "C" is available and thus is equivalent to strcmp
     int strcoll(const char *str1, const char *str2);
 
     // Compare characters of two strings
     // Compares up to num characters of the C string str1 to those of the C string str2.
-    int strncmp(const string str1, const string str2, size_t num);
+    int strncmp(const char *str1, const char *str2, size_t num);
 
     // Transform string using locale
     // Only "C" is available and thus is equivalent to strncmp
-    size_t strxfrm(string destination, const string source, size_t num);
+    size_t strxfrm(char *destination, const char *source, size_t num);
 
     // Searching
 
@@ -68,35 +66,35 @@ namespace std
 
     // Locate first occurrence of character in string
     // Returns a pointer to the first occurrence of character in the C string str.
-    const string strchr(const string str, int character);
-    string strchr(string str, int character);
+    const char *strchr(const char *str, int character);
+    char *strchr(char *str, int character);
 
     // Get span until character in string
     // Scans str1 for the first occurrence of any of the characters that are part of str2, returning the number of characters of str1 read before this first occurrence.
-    size_t strcspn(const string str1, const string str2);
+    size_t strcspn(const char *str1, const char *str2);
 
     // Locate characters in string
     // Returns a pointer to the first occurrence in str1 of any of the characters that are part of str2, or a null pointer if there are no matches.
-    const string strpbrk(const string str1, const string str2);
-    string strpbrk(string str1, const string str2);
+    const char *strpbrk(const char *str1, const char *str2);
+    char *strpbrk(char *str1, const char *str2);
 
     // Locate last occurrence of character in string
     // Returns a pointer to the last occurrence of character in the C string str.
-    const string strrchr(const string str, int character);
-    string strrchr(string str, int character);
+    const char *strrchr(const char *str, int character);
+    char *strrchr(char *str, int character);
 
     // Get span of character set in string
     // Returns the length of the initial portion of str1 which consists only of characters that are part of str2.
-    size_t strspn(const string str1, const string str2);
+    size_t strspn(const char *str1, const char *str2);
 
     // Locate substring
     // Returns a pointer to the first occurrence of str2 in str1, or a null pointer if str2 is not part of str1.
-    const string strstr(const string str1, const string str2);
-    string strstr(string str1, const string str2);
+    const char *strstr(const char *str1, const char *str2);
+    char *strstr(char *str1, const char *str2);
 
     // Split string into tokens
     // A sequence of calls to this function split str into tokens, which are sequences of contiguous characters separated by any of the characters that are part of delimiters.
-    string strtok(string str, const string delimiters);
+    char *strtok(char *str, const char *delimiters);
 
     // Other
 
@@ -106,9 +104,9 @@ namespace std
 
     // Get pointer to error message string
     // Interprets the value of errnum, generating a string with a message that describes the error condition as if set to errno by a function of the library.
-    string strerror(int errnum);
+    char *strerror(int errnum);
 
     // Get string length
     // Returns the length of the C string str.
-    size_t strlen(const string str);
+    size_t strlen(const char *str);
 } // namespace std

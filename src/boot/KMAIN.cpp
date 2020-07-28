@@ -2,7 +2,6 @@
 #include <stdint.h>
 #include <common/serial.h>
 #include <logging/debug.h>
-#include <logging/ansi_colours.h>
 
 #define MULTIBOOT_MAGIC 0x2BADB002
 

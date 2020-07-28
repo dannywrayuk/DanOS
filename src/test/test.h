@@ -2,7 +2,7 @@
 #include <common/std/cstring.h>
 
 // large debug output causes crash, turn off to prevent
-// #define PRETTY_TEST
+#define PRETTY_TEST
 
 #define TEST(name)                                  \
     if (!test(&name##_test_function, #name, depth)) \
@@ -48,9 +48,9 @@
 #define LABEL_REASON dbg_label("REASON", ANSI_COLOUR_BACKGROUND_BLUE)
 #define LABEL_OTHER(msg) dbg_label(msg, ANSI_COLOUR_BACKGROUND_MAGENTA)
 
-void fail_message(const string msg);
+void fail_message(const char *msg);
 void fail_message();
-void test_debug_message(const string msg);
-int test(int (*function)(int), const string name, int depth);
-int test(int (*function)(), const string name, int depth);
-int complete(int result, const string name);
+void test_debug_message(const char *msg);
+int test(int (*function)(int), const char *name, int depth);
+int test(int (*function)(), const char *name, int depth);
+int complete(int result, const char *name);

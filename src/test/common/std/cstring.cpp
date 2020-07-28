@@ -246,9 +246,9 @@ END_IMPLEMENT
 
 BEGIN_IMPLEMENT(memchr)
 {
-    const string s1 = "";
-    const string s2 = "abcdefabcdef";
-    const string s3 = "11111111111111111111";
+    const char *s1 = "";
+    const char *s2 = "abcdefabcdef";
+    const char *s3 = "11111111111111111111";
 
     if (std::memchr(s1, 'x', 0) != NULL)
     {
@@ -319,7 +319,7 @@ BEGIN_IMPLEMENT(strpbrk)
 {
     char str[] = "This is a sample string";
     char key[] = "aeiou";
-    const string vowels = "iiaaei";
+    const char *vowels = "iiaaei";
     char *pch;
     pch = std::strpbrk(str, key);
     for (int i = 0; pch != NULL; i++)
@@ -369,7 +369,7 @@ BEGIN_IMPLEMENT(strtok)
 {
     char str[] = "- This, a sample string.";
     char *pch;
-    const string tokens[] = {"This", "a", "sample", "string"};
+    const char *tokens[] = {"This", "a", "sample", "string"};
     pch = std::strtok(str, " ,.-");
     for (int i = 0; pch != NULL; i++)
     {

@@ -3,6 +3,7 @@
 /**/*.o
 /**/*.d
 temp
+junk
 
 danos.bin
 danos.hd

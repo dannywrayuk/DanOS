@@ -26,7 +26,7 @@ void write_serial(char a)
     outb(COMPORT1, a);
 }
 
-void write_serial(string a)
+void write_serial(char *a)
 {
     int x = 0;
     while (a[x] != '\0')
@@ -37,7 +37,7 @@ void write_serial(string a)
         x++;
     }
 }
-void write_serial(const string a)
+void write_serial(const char *a)
 {
-    write_serial((string)a);
+    write_serial((char *)a);
 }
