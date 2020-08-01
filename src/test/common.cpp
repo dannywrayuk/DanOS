@@ -5,8 +5,8 @@
 
 BEGIN_TESTS(common)
 {
-    TEST(cstring);
-    TEST(ctype);
+    // TEST(cstring);
+    // TEST(ctype);
     TEST(stdlib);
 }
 END_TESTS
