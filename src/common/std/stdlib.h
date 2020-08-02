@@ -54,6 +54,22 @@ namespace std
     // Parses the C-string str interpreting its content as an integral number of the specified base, which is returned as a value of type unsigned long long int. If endptr is not a null pointer, the function also sets the value of endptr to point to the first character after the number.
     unsigned long long int strtoull(const char *str, char **endptr, int base);
 
+    // Convert integer to string (non-standard function)
+    // Converts an integer value to a null-terminated string using the specified base and stores the result in the array given by str parameter.
+    char *itoa(int value, char *str);
+    char *itoa(int value, char *str, int base);
+    char *itoa(int value, char *str, int base, int prefix);
+
+    // Convert unsigned integer to string (non-standard function)
+    // Converts an unsigned integer value to a null-terminated string using the specified base and stores the result in the array given by str parameter.
+    char *utoa(unsigned int value, char *str);
+    char *utoa(unsigned int value, char *str, int base);
+    char *utoa(unsigned int value, char *str, int base, int prefix);
+
+    // Convert double to string (non-standard function)
+    // Converts a double value to a null-terminated string using the decimal precision specified and stores the result in the array given by str parameter.
+    char *ftoa(double value, char *str, int afterpoint);
+
     // Pseudo-random sequence generation
 
     // Generate random number

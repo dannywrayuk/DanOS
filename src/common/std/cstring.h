@@ -109,4 +109,13 @@ namespace std
     // Get string length
     // Returns the length of the C string str.
     size_t strlen(const char *str);
+
+    // Reverse a string
+    // Reverses a string given by str for num digits.
+    char *strnrev(char *str, int num);
+
+    // Reverse a string
+    // Reverses a string given by str.
+    char *strrev(char *str);
+
 } // namespace std

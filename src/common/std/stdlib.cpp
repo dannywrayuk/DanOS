@@ -1,8 +1,8 @@
-#include <limits.h>
 #include <common/std/stdlib.h>
 #include <common/std/ctype.h>
-#include <logging/debug.h>
+#include <common/std/cstring.h>
 #include <stddef.h>
+#include <limits.h>
 
 #ifndef TRUE
 #define TRUE 1
@@ -475,6 +475,124 @@ namespace std
 
         return sign * res;
     }
+
+    char *itoa(int value, char *str)
+    {
+        return itoa(value, str, 10, 1);
+    }
+
+    char *itoa(int value, char *str, int base)
+    {
+        return itoa(value, str, base, 1);
+    }
+
+    char *itoa(int value, char *str, int base, int prefix)
+    {
+        int i = 0;
+        bool isNegative = false;
+
+        if (value == 0)
+        {
+            str[i++] = '0';
+            str[i] = '\0';
+            return str;
+        }
+
+        if (value < 0)
+        {
+            isNegative = true;
+            value = -value;
+        }
+
+        while (value != 0)
+        {
+            int rem = value % base;
+            str[i++] = (rem > 9) ? (rem - 10) + 'a' : rem + '0';
+            value = value / base;
+        }
+        if (prefix)
+        {
+
+            if (base == 2)
+            {
+                str[i++] = 'b';
+                str[i++] = '0';
+            }
+            if (base == 8)
+            {
+                str[i++] = '0';
+            }
+            if (base == 16)
+            {
+
+                str[i++] = 'x';
+                str[i++] = '0';
+            }
+        }
+        if (isNegative)
+            str[i++] = '-';
+
+        str[i] = '\0';
+
+        std::strnrev(str, i);
+
+        return str;
+    }
+
+    char *utoa(unsigned int value, char *str)
+    {
+        return utoa(value, str, 10, 1);
+    }
+
+    char *utoa(unsigned int value, char *str, int base)
+    {
+        return utoa(value, str, base, 1);
+    }
+
+    char *utoa(unsigned int value, char *str, int base, int prefix)
+    {
+        int i = 0;
+
+        if (value == 0)
+        {
+            str[i++] = '0';
+            str[i] = '\0';
+            return str;
+        }
+
+        while (value != 0)
+        {
+            int rem = value % base;
+            str[i++] = (rem > 9) ? (rem - 10) + 'a' : rem + '0';
+            value = value / base;
+        }
+        if (prefix)
+        {
+            if (base == 2)
+            {
+                str[i++] = 'b';
+                str[i++] = '0';
+            }
+            if (base == 8)
+            {
+                str[i++] = '0';
+            }
+            if (base == 16)
+            {
+
+                str[i++] = 'x';
+                str[i++] = '0';
+            }
+        }
+
+        str[i] = '\0';
+
+        std::strnrev(str, i);
+
+        return str;
+    }
+
+    // char *ftoa(double value, char *str, int afterpoint) {}
 
     static unsigned long int next = 1;
 

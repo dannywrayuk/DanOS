@@ -416,6 +416,30 @@ BEGIN_IMPLEMENT(strlen)
 }
 END_IMPLEMENT
 
+BEGIN_IMPLEMENT(strrev)
+{
+    char string[23] = "hello this is a string";
+    char result[23] = "gnirts a si siht olleh";
+    std::strrev(string);
+    if (std::strcmp(result, string))
+    {
+        TEST_FAIL("1: failed to reverse string");
+    }
+}
+END_IMPLEMENT
+
+BEGIN_IMPLEMENT(strnrev)
+{
+    char string[23] = "hello this is a string";
+    char result[23] = "olleh this is a string";
+    std::strnrev(string, 5);
+    if (std::strcmp(string, result))
+    {
+        TEST_FAIL("1: failed to reverse part of string");
+    }
+}
+END_IMPLEMENT
+
 BEGIN_TESTS(cstring)
 {
     TEST(memcpy);
@@ -438,7 +462,9 @@ BEGIN_TESTS(cstring)
     TEST(strstr);
     TEST(strtok);
     TEST(memset);
-    TEST(strerror)
-    TEST(strlen)
+    TEST(strerror);
+    TEST(strlen);
+    TEST(strrev);
+    TEST(strnrev);
 }
 END_TESTS
