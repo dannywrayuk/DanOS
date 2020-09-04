@@ -4,17 +4,15 @@ HDSIZE=1G
 SRCDIR=src
 TEMPDIR=temp
 
-testing=off
-
 CPU=i686
 AS= nasm
 CXX= /opt/cross/bin/$(CPU)-elf-g++
 LD= $(CXX:g++=ld)
-WARNINGS= #-Wall -Wextra
+
 ASFLAGS=-f elf32 -I$(SRCDIR)
 CFLAGS= -ffreestanding -m32 -std=c++11 -mno-red-zone -fno-exceptions -fno-rtti $(WARNINGS) -I$(SRCDIR)
+WARNINGS= #-Wall -Wextra
 LFLAGS=  -nostdlib -T $(SRCDIR)/link.ld
-BUILDDEFS=$(SRCDIR)/build/definitions.h
 
 QEMU=qemu-system-x86_64
 QEMUFLAGS= -m 2G -smp 4 -no-reboot -serial stdio -kernel $(KERNELBIN) -hda $(KERNELHD)
@@ -32,20 +30,10 @@ OBJ=$(addprefix $(TEMPDIR)/, $(CFILES:.cpp=.cpp.o) $(ASMFILES:.asm=.asm.o))
 
 .PHONY: all clean clean-hd clean-all new run
 
-all: build-definitions $(KERNELBIN) run
-
-build-definitions:
-	@echo "Building optional definitions..."
-	@> $(BUILDDEFS)
-	@echo "#pragma once" > $(BUILDDEFS)
-ifeq ($(testing), on)
-	@echo "Testing is on."
-	@echo "#define _BUILD_WITH_TEST" >> $(BUILDDEFS)
-endif
-	@echo "Done."
+all: $(KERNELBIN) run
 
 $(KERNELBIN): $(OBJ)
-	@echo -n "Building: $(KERNELBIN)"
+	@echo -n "\nBuilding: $(KERNELBIN)"
 	@$(LD) $(OBJ) $(LFLAGS) -o $(KERNELBIN)
 	@echo "  ..Done."
 

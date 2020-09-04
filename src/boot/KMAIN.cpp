@@ -1,4 +1,3 @@
-#include <build/optional.h>
 #include <stdint.h>
 #include <common/serial.h>
 #include <logging/debug.h>
@@ -15,7 +14,4 @@ extern "C" void KMAIN(uint32_t magic, uint32_t addr)
     }
     init_serial();
     std::printf("Serial initialised.\n");
-#ifdef _BUILD_WITH_TEST
-    test_all();
-#endif
 }

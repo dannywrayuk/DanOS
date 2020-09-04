@@ -1,8 +1,9 @@
+#include <stddef.h>
+#include <limits.h>
 #include <common/std/stdlib.h>
 #include <common/std/ctype.h>
 #include <common/std/cstring.h>
-#include <stddef.h>
-#include <limits.h>
+#include <common/std/cmath.h>
 
 #ifndef TRUE
 #define TRUE 1
@@ -590,16 +591,6 @@ namespace std
         std::strnrev(str, i);
 
         return str;
-    }
-
-    int pow(int x, unsigned int y)
-    {
-        if (y == 0)
-            return 1;
-        else if (y % 2 == 0)
-            return pow(x, y / 2) * pow(x, y / 2);
-        else
-            return x * pow(x, y / 2) * pow(x, y / 2);
     }
 
     char *ftoa(double value, char *str, int afterpoint)
