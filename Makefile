@@ -12,8 +12,8 @@ CXX= /opt/cross/bin/$(CPU)-elf-g++
 LD= $(CXX:g++=ld)
 WARNINGS= #-Wall -Wextra
 ASFLAGS=-f elf32 -I$(SRCDIR)
-CFLAGS= -m32 -ffreestanding -std=c++11 -mno-red-zone -fno-exceptions -nostdlib -fno-rtti $(WARNINGS) -I$(SRCDIR)
-LFLAGS= -T $(SRCDIR)/link.ld
+CFLAGS= -ffreestanding -m32 -std=c++11 -mno-red-zone -fno-exceptions -fno-rtti $(WARNINGS) -I$(SRCDIR)
+LFLAGS=  -nostdlib -T $(SRCDIR)/link.ld
 BUILDDEFS=$(SRCDIR)/build/definitions.h
 
 QEMU=qemu-system-x86_64

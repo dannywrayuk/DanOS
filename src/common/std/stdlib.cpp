@@ -592,7 +592,43 @@ namespace std
         return str;
     }
 
-    // char *ftoa(double value, char *str, int afterpoint) {}
+    int pow(int x, unsigned int y)
+    {
+        if (y == 0)
+            return 1;
+        else if (y % 2 == 0)
+            return pow(x, y / 2) * pow(x, y / 2);
+        else
+            return x * pow(x, y / 2) * pow(x, y / 2);
+    }
+
+    char *ftoa(double value, char *str, int afterpoint)
+    {
+        // Extract integer part
+        int ipart = (int)value;
+
+        if (value < 0)
+        {
+            value *= -1;
+        }
+        // Extract floating part
+        double fpart = value - (double)abs(ipart);
+        // convert integer part to string
+        itoa(ipart, str);
+        // check for display option after point
+        if (afterpoint != 0)
+        {
+            strcat(str, "."); // add dot
+            // Get the value of fraction part upto given no.
+            // of points after dot. The third parameter
+            // is needed to handle cases like 233.007
+            fpart = fpart * pow(10, afterpoint);
+            char fraction[10] = {};
+            utoa((int)fpart, fraction);
+            strcat(str, fraction);
+        }
+        return str;
+    }
 
     static unsigned long int next = 1;
 

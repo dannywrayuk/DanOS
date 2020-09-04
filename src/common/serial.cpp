@@ -37,6 +37,17 @@ void write_serial(char *a)
         x++;
     }
 }
+void write_serial(char *a, size_t num)
+{
+    int x = 0;
+    while (a[x] != '\0' && x < num)
+    {
+        while (is_transmit_empty() == 0)
+            ;
+        outb(COMPORT1, a[x]);
+        x++;
+    }
+}
 void write_serial(const char *a)
 {
     write_serial((char *)a);

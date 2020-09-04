@@ -17,11 +17,11 @@ void dbg(const char *msg)
 void dbg_label(const char *msg, const char *col)
 {
     dbg(col);
-    dbg(ANSI_BOLD);
+    dbg(BOLD_ANSI);
     dbg(" ");
     dbg(msg);
     dbg(" ");
-    dbg(ANSI_RESET);
+    dbg(RESET_ANSI);
     dbg(" ");
 }
 

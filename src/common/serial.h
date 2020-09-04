@@ -9,6 +9,7 @@ int is_transmit_empty();
 
 void write_serial(char a);
 void write_serial(char *a);
+void write_serial(char *a, size_t num);
 void write_serial(const char *a);
 
 int serial_received();

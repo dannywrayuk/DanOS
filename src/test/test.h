@@ -42,11 +42,11 @@
 
 #define TEST_DEBUG(msg) test_debug_message(msg)
 
-#define LABEL_PASS dbg_label(" PASS ", ANSI_COLOUR_BACKGROUND_GREEN)
-#define LABEL_FAIL dbg_label(" FAIL ", ANSI_COLOUR_BACKGROUND_RED)
-#define LABEL_DEBUG dbg_label(" DEBUG", ANSI_COLOUR_BACKGROUND_CYAN)
-#define LABEL_REASON dbg_label("REASON", ANSI_COLOUR_BACKGROUND_BLUE)
-#define LABEL_OTHER(msg) dbg_label(msg, ANSI_COLOUR_BACKGROUND_MAGENTA)
+#define LABEL_PASS dbg_label(" PASS ", GREEN_BACKGROUND_ANSI)
+#define LABEL_FAIL dbg_label(" FAIL ", RED_BACKGROUND_ANSI)
+#define LABEL_DEBUG dbg_label(" DEBUG", CYAN_BACKGROUND_ANSI)
+#define LABEL_REASON dbg_label("REASON", BLUE_BACKGROUND_ANSI
+#define LABEL_OTHER(msg) dbg_label(msg, MAGENTA_BACKGROUND_ANSI)
 
 void fail_message(const char *msg);
 void fail_message();

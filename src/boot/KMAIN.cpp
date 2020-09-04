@@ -14,8 +14,7 @@ extern "C" void KMAIN(uint32_t magic, uint32_t addr)
         return;
     }
     init_serial();
-    dbg("Serial initialised.\n");
-    endl();
+    std::printf("Serial initialised.\n");
 #ifdef _BUILD_WITH_TEST
     test_all();
 #endif
