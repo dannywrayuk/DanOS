@@ -138,19 +138,19 @@ namespace std
         char *occ1 = (char *)format;
         char *occ2 = std::strchr(occ1, '%');
 
-        write_serial(occ1, occ2 - occ1);
+        io::serialnOut(occ1, occ2 - occ1);
 
         char buffer[100];
 
         while (occ2 != NULL)
         {
             _sprintf_switch(buffer, &occ2, &argp);
-            write_serial(buffer);
+            io::serialOut(buffer);
             occ1 = ++occ2;
             occ2 = std::strchr(occ1, '%');
-            write_serial(occ1, occ2 - occ1);
+            io::serialnOut(occ1, occ2 - occ1);
         }
-        write_serial("");
+        io::serialOut("");
         va_end(argp);
         return 0;
     }

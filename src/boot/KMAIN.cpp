@@ -1,6 +1,5 @@
 #include <stdint.h>
 #include <common/serial.h>
-#include <logging/debug.h>
 #include <common/std/stdio.h>
 
 #define MULTIBOOT_MAGIC 0x2BADB002
@@ -12,6 +11,6 @@ extern "C" void KMAIN(uint32_t magic, uint32_t addr)
     {
         return;
     }
-    init_serial();
+    io::initSerial();
     std::printf("Serial initialised.\n");
 }

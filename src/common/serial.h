@@ -1,15 +1,17 @@
 #pragma once
-#include <common/std/cstring.h>
+#include <stddef.h>
 
 #define COMPORT1 0x3f8
 
-void init_serial();
+namespace io
+{
+    void initSerial();
 
-int is_transmit_empty();
+    int isTransmitEmpty();
 
-void write_serial(char a);
-void write_serial(char *a);
-void write_serial(char *a, size_t num);
-void write_serial(const char *a);
+    void serialOut(char a);
+    void serialOut(char *a);
+    void serialOut(const char *a);
+    void serialnOut(char *a, size_t num);
 
-int serial_received();
+} // namespace io

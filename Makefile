@@ -57,12 +57,12 @@ clean:
 	@echo -n "Cleaning temporary files..."
 	@rm -f  $(OBJ) $(KERNELBIN) $(DEPFILES)
 	@rm -d -r -f temp
-	@echo "  ..Done."
+	@echo "  ..Done.\n"
 
 clean-hd:
 	@echo -n "Cleaning hard disk..."
 	@rm -f $(OBJ) $(KERNELHD)
-	@echo " ..Done."
+	@echo " ..Done.\n"
 
 clean-all: clean clean-hd
 
