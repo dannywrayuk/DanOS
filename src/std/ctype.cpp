@@ -1,4 +1,4 @@
-#include <common/std/ctype.h>
+#include <std/ctype.h>
 
 // Control codes
 #define CTRL_START 0x00

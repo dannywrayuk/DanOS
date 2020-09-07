@@ -1,9 +1,9 @@
 #include <stddef.h>
 #include <limits.h>
-#include <common/std/stdlib.h>
-#include <common/std/ctype.h>
-#include <common/std/cstring.h>
-#include <common/std/cmath.h>
+#include <std/cstdlib.h>
+#include <std/ctype.h>
+#include <std/cstring.h>
+#include <std/cmath.h>
 
 #ifndef TRUE
 #define TRUE 1

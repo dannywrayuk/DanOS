@@ -1,8 +1,8 @@
 #include <stdarg.h>
-#include <common/std/stdio.h>
-#include <common/std/cstring.h>
-#include <common/std/stdlib.h>
-#include <common/serial.h>
+#include <std/cstdio.h>
+#include <std/cstring.h>
+#include <std/cstdlib.h>
+#include <io/serial.h>
 
 namespace std
 {

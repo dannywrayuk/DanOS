@@ -1,4 +1,4 @@
-#include <common/memory.h>
+#include <mem/cmem.h>
 
 extern "C" void *memcpy(void *destination, const void *source, size_t num)
 {

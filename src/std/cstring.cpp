@@ -1,5 +1,5 @@
 #include <stddef.h>
-#include <common/std/cstring.h>
+#include <std/cstring.h>
 
 namespace std
 {

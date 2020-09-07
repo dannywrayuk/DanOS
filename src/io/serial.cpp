@@ -1,5 +1,5 @@
-#include <common/serial.h>
-#include <common/port.h>
+#include <io/serial.h>
+#include <io/port.h>
 
 namespace io
 {
