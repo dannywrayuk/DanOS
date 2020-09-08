@@ -12,5 +12,4 @@ extern "C" void KMAIN(uint32_t magic, uint32_t addr)
         return;
     }
     io::initSerial();
-    std::printf("Serial initialised.\n");
 }
