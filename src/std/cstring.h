@@ -1,5 +1,6 @@
 #pragma once
 #include <stddef.h>
+#include <stdint.h>
 
 namespace std
 {
@@ -38,20 +39,20 @@ namespace std
 
     // Compare two blocks of memory
     // Compares the first num bytes of the block of memory pointed by ptr1 to the first num bytes pointed by ptr2, returning zero if they all match or a value different from zero representing which is greater if they do not.
-    int memcmp(const void *ptr1, const void *ptr2, size_t num);
+    int32_t memcmp(const void *ptr1, const void *ptr2, size_t num);
 
     // Compare two strings
     // Compares the C char * str1 to the C char * str2.
-    int strcmp(const char *str1, const char *str2);
+    int32_t strcmp(const char *str1, const char *str2);
 
     // Compare two strings using locale
     // Compares the C char * str1 to the C char * str2, both interpreted appropriately according to the LC_COLLATE category of the C locale currently selected.
     // Only "C" is available and thus is equivalent to strcmp
-    int strcoll(const char *str1, const char *str2);
+    int32_t strcoll(const char *str1, const char *str2);
 
     // Compare characters of two strings
     // Compares up to num characters of the C string str1 to those of the C string str2.
-    int strncmp(const char *str1, const char *str2, size_t num);
+    int32_t strncmp(const char *str1, const char *str2, size_t num);
 
     // Transform string using locale
     // Only "C" is available and thus is equivalent to strncmp
@@ -104,7 +105,7 @@ namespace std
 
     // Get pointer to error message string
     // Interprets the value of errnum, generating a string with a message that describes the error condition as if set to errno by a function of the library.
-    char *strerror(int errnum);
+    char *strerror(uint8_t errnum);
 
     // Get string length
     // Returns the length of the C string str.
@@ -112,7 +113,7 @@ namespace std
 
     // Reverse a string
     // Reverses a string given by str for num digits.
-    char *strnrev(char *str, int num);
+    char *strnrev(char *str, size_t num);
 
     // Reverse a string
     // Reverses a string given by str.

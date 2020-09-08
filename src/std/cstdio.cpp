@@ -9,8 +9,8 @@ namespace std
 
     void _sprintf_switch(char *buffer, char **str, va_list *argpp)
     {
-        int prefix = 0;
-        int dplace = 6;
+        uint8_t prefix = 0;
+        uint8_t dplace = 6;
         if (*(*str + 1) == '#')
         {
             ++*str;
@@ -32,28 +32,28 @@ namespace std
         // Signed decimal int
         case 'd':
         case 'i':
-            std::itoa(va_arg(*argpp, int), buffer, 10, prefix);
+            std::itoa(va_arg(*argpp, int32_t), buffer, 10, prefix);
             break;
 
         // Unsigned binary int
         case 'b':
-            std::utoa(va_arg(*argpp, int), buffer, 2, prefix);
+            std::utoa(va_arg(*argpp, uint32_t), buffer, 2, prefix);
             break;
 
         // Unsigned decimal int
         case 'u':
-            std::utoa(va_arg(*argpp, int), buffer, 10, prefix);
+            std::utoa(va_arg(*argpp, uint32_t), buffer, 10, prefix);
             break;
 
         // Unsigned octal int
         case 'o':
-            std::utoa(va_arg(*argpp, int), buffer, 8, prefix);
+            std::utoa(va_arg(*argpp, uint32_t), buffer, 8, prefix);
             break;
 
         // Unsigned hex int
         case 'x':
         case 'X':
-            std::utoa(va_arg(*argpp, int), buffer, 16, prefix);
+            std::utoa(va_arg(*argpp, uint32_t), buffer, 16, prefix);
             break;
 
         // Decimal float
@@ -64,7 +64,7 @@ namespace std
 
         // Character
         case 'c':
-            c[0] = va_arg(*argpp, int);
+            c[0] = va_arg(*argpp, int32_t);
             std::strcpy(buffer, c);
             break;
 
@@ -78,7 +78,7 @@ namespace std
         }
     }
 
-    int _snprintf_internal(char *str, size_t n, const char *format, va_list *argpp)
+    uint32_t _snprintf_internal(char *str, size_t n, const char *format, va_list *argpp)
     {
         char *occ1 = (char *)format;
         char *occ2 = std::strchr(occ1, '%');
@@ -112,25 +112,25 @@ namespace std
         return 0;
     }
 
-    int sprintf(char *str, const char *format, ...)
+    uint32_t sprintf(char *str, const char *format, ...)
     {
         va_list argp;
         va_start(argp, format);
-        int ret = _snprintf_internal(str, -1, format, &argp);
+        uint32_t ret = _snprintf_internal(str, -1, format, &argp);
         va_end(argp);
         return ret;
     }
 
-    int snprintf(char *str, size_t n, const char *format, ...)
+    uint32_t snprintf(char *str, size_t n, const char *format, ...)
     {
         va_list argp;
         va_start(argp, format);
-        int ret = _snprintf_internal(str, n, format, &argp);
+        uint32_t ret = _snprintf_internal(str, n, format, &argp);
         va_end(argp);
         return ret;
     }
 
-    int printf(const char *format, ...)
+    uint32_t printf(const char *format, ...)
     {
         va_list argp;
         va_start(argp, format);
@@ -140,7 +140,7 @@ namespace std
 
         io::serialnOut(occ1, occ2 - occ1);
 
-        char buffer[100];
+        char buffer[500];
 
         while (occ2 != NULL)
         {

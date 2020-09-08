@@ -1,4 +1,5 @@
 #pragma once
+#include <stdint.h>
 
 // Character handling functions
 // This header declares a set of functions to classify and transform individual characters.
@@ -6,37 +7,37 @@
 // Character classification functions
 
 // Check if character is alphanumeric
-int isalnum(char c);
+uint8_t isalnum(char c);
 
 // Check if character is alphabetic
-int isalpha(char c);
+uint8_t isalpha(char c);
 
 // Check if character is blank
-int isblank(char c);
+uint8_t isblank(char c);
 
 // Check if character is a control character
-int iscntrl(char c);
+uint8_t iscntrl(char c);
 
 // Check if character is decimal digit
-int isdigit(char c);
+uint8_t isdigit(char c);
 
 // Check if character has graphical representation
-int isgraph(char c);
+uint8_t isgraph(char c);
 
 // Check if character is lowercase letter
-int islower(char c);
+uint8_t islower(char c);
 
 // Check if character is printable
-int isprint(char c);
+uint8_t isprint(char c);
 
 // Check if character is a punctuation character
-int ispunct(char c);
+uint8_t ispunct(char c);
 
 // Check if character is a white-space
-int isspace(char c);
+uint8_t isspace(char c);
 
 // Check if character is uppercase letter
-int isupper(char c);
+uint8_t isupper(char c);
 
 // Check if character is hexadecimal digit
-int isxdigit(char c);
+uint8_t isxdigit(char c);

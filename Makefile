@@ -12,7 +12,7 @@ LD= $(CXX:g++=ld)
 ASFLAGS=-f elf32 -I$(SRCDIR)
 CFLAGS= -ffreestanding -m32 -std=c++11 -mno-red-zone -fno-exceptions -fno-rtti $(WARNINGS) -I$(SRCDIR)
 WARNINGS= #-Wall -Wextra
-LFLAGS=  -nostdlib -T $(SRCDIR)/link.ld
+LFLAGS= -lgcc -nostdlib -T $(SRCDIR)/link.ld
 
 QEMU=qemu-system-x86_64
 QEMUFLAGS= -m 2G -smp 4 -no-reboot -serial stdio -kernel $(KERNELBIN) -hda $(KERNELHD)
@@ -34,7 +34,7 @@ all: $(KERNELBIN) run
 
 $(KERNELBIN): $(OBJ)
 	@echo -n "\nBuilding: $(KERNELBIN)"
-	@$(LD) $(OBJ) $(LFLAGS) -o $(KERNELBIN)
+	@$(CXX) $(OBJ) $(LFLAGS) -o $(KERNELBIN)
 	@echo "  ..Done."
 
 $(TEMPDIR)/%.cpp.o: %.cpp

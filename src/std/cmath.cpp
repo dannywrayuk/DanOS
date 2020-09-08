@@ -2,7 +2,7 @@
 
 namespace std
 {
-    int pow(int x, unsigned int y)
+    int32_t pow(int32_t x, uint32_t y)
     {
         if (y == 0)
             return 1;

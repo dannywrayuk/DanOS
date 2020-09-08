@@ -1,4 +1,5 @@
 #include <mem/cmem.h>
+#include <io/serial.h>
 
 extern "C" void *memcpy(void *destination, const void *source, size_t num)
 {
@@ -35,7 +36,7 @@ extern "C" int memcmp(const void *ptr1, const void *ptr2, size_t num)
     return 0;
 }
 
-extern "C" void *memset(void *ptr, int value, size_t num)
+extern "C" void *memset(void *ptr, uint32_t value, size_t num)
 {
     unsigned char *p = (unsigned char *)ptr;
     while (num--)

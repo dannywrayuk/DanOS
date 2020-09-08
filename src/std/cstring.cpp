@@ -77,7 +77,7 @@ namespace std
         return destination;
     }
 
-    int memcmp(const void *ptr1, const void *ptr2, size_t num)
+    int32_t memcmp(const void *ptr1, const void *ptr2, size_t num)
     {
         const char *p1 = (const char *)ptr1;
         const char *p2 = (const char *)ptr2;
@@ -90,7 +90,7 @@ namespace std
         return 0;
     }
 
-    int strcmp(const char *str1, const char *str2)
+    int32_t strcmp(const char *str1, const char *str2)
     {
         for (int i = 0;; i++)
         {
@@ -106,14 +106,14 @@ namespace std
         }
     }
 
-    int strcoll(const char *str1, const char *str2)
+    int32_t strcoll(const char *str1, const char *str2)
     {
         return strcmp(str1, str2);
     }
 
-    int strncmp(const char *str1, const char *str2, size_t num)
+    int32_t strncmp(const char *str1, const char *str2, size_t num)
     {
-        for (int i = 0; i < num; i++)
+        for (uint32_t i = 0; i < num; i++)
         {
             if (str1[i] != str2[i])
             {
@@ -270,7 +270,7 @@ namespace std
         return p;
     }
 
-    char *strerror(int errnum)
+    char *strerror(uint8_t errnum)
     {
         const char *sys_errlist[] = {
             "Operation succeeded",
@@ -312,9 +312,9 @@ namespace std
         return i;
     }
 
-    char *strnrev(char *str, int num)
+    char *strnrev(char *str, size_t num)
     {
-        int i, j;
+        int32_t i, j;
         char c;
         for (i = 0, j = num - 1; i < j; i++, j--)
         {
@@ -327,7 +327,7 @@ namespace std
 
     char *strrev(char *str)
     {
-        int i, j;
+        int32_t i, j;
         char c;
         for (i = 0, j = strlen(str) - 1; i < j; i++, j--)
         {

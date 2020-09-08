@@ -29,7 +29,7 @@
 #define PUNCTUATION4_END 0x7E
 #define DEL 0x7F
 
-int isalnum(char c)
+uint8_t isalnum(char c)
 {
     if (c >= af_START && c <= gz_END ||
         c >= AF_START && c <= GZ_END ||
@@ -40,7 +40,7 @@ int isalnum(char c)
     return 0;
 }
 
-int isalpha(char c)
+uint8_t isalpha(char c)
 {
     if (c >= af_START && c <= gz_END ||
         c >= AF_START && c <= GZ_END)
@@ -50,7 +50,7 @@ int isalpha(char c)
     return 0;
 }
 
-int isblank(char c)
+uint8_t isblank(char c)
 {
     if (c == TAB || c == SPACE)
     {
@@ -59,7 +59,7 @@ int isblank(char c)
     return 0;
 }
 
-int iscntrl(char c)
+uint8_t iscntrl(char c)
 {
     if (c >= CTRL_START && c <= CTRL2_END || c == DEL)
     {
@@ -68,7 +68,7 @@ int iscntrl(char c)
     return 0;
 }
 
-int isdigit(char c)
+uint8_t isdigit(char c)
 {
     if (c >= NUM_START && c <= NUM_END)
     {
@@ -77,7 +77,7 @@ int isdigit(char c)
     return 0;
 }
 
-int isgraph(char c)
+uint8_t isgraph(char c)
 {
     if (c >= PUNCTUATION_START && c <= PUNCTUATION4_END)
     {
@@ -86,7 +86,7 @@ int isgraph(char c)
     return 0;
 }
 
-int islower(char c)
+uint8_t islower(char c)
 {
     if (c >= af_START && c <= gz_END)
     {
@@ -95,7 +95,7 @@ int islower(char c)
     return 0;
 }
 
-int isprint(char c)
+uint8_t ispruint8_t(char c)
 {
     if (c >= SPACE && c <= PUNCTUATION4_END)
     {
@@ -104,7 +104,7 @@ int isprint(char c)
     return 0;
 }
 
-int ispunct(char c)
+uint8_t ispunct(char c)
 {
     if (c >= PUNCTUATION_START && c <= PUNCTUATION_END ||
         c >= PUNCTUATION2_START && c <= PUNCTUATION2_END ||
@@ -116,7 +116,7 @@ int ispunct(char c)
     return 0;
 }
 
-int isspace(char c)
+uint8_t isspace(char c)
 {
     if (c == TAB ||
         c >= WHITE_SPACE_START && c <= WHITE_SPACE_END ||
@@ -127,7 +127,7 @@ int isspace(char c)
     return 0;
 }
 
-int isupper(char c)
+uint8_t isupper(char c)
 {
     if (c >= AF_START && c <= GZ_END)
     {
@@ -136,7 +136,7 @@ int isupper(char c)
     return 0;
 }
 
-int isxdigit(char c)
+uint8_t isxdigit(char c)
 {
     if (c >= NUM_START && c <= NUM_END ||
         c >= AF_START && c <= AF_END ||

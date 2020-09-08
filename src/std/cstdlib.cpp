@@ -1,4 +1,3 @@
-#include <stddef.h>
 #include <limits.h>
 #include <std/cstdlib.h>
 #include <std/ctype.h>
@@ -10,7 +9,7 @@
 #define FALSE 0
 #endif
 
-static int maxExponent = 511;
+static uint32_t maxExponent = 511;
 static long double powersOf10[] = {10., 100., 1.0e4, 1.0e8, 1.0e16, 1.0e32, 1.0e64, 1.0e128, 1.0e256};
 
 namespace std
@@ -18,13 +17,13 @@ namespace std
 
     long double atold(const char *str)
     {
-        int sign, expSign = FALSE;
+        uint8_t sign, expSign = FALSE;
         long double fraction, dblExp, *d;
         register char *p, c;
-        int exp = 0;
-        int fracExp = 0;
-        int mantSize;
-        int decPt;
+        int32_t exp = 0;
+        int32_t fracExp = 0;
+        int32_t mantSize;
+        int32_t decPt;
         char *pExp;
 
         p = (char *)str;
@@ -188,11 +187,11 @@ namespace std
         return atold(str);
     }
 
-    int atoi(const char *str)
+    int16_t atoi(const char *str)
     {
-        int res = 0;
-        int i = 0;
-        int sign = 1;
+        int16_t res = 0;
+        size_t i = 0;
+        int8_t sign = 1;
         for (; str[i] != '\0' && isspace(str[i]); ++i)
             ;
         if (str[i] == '-')
@@ -207,11 +206,11 @@ namespace std
         return sign * res;
     }
 
-    long int atol(const char *str)
+    int32_t atol(const char *str)
     {
-        long int res = 0;
-        int i = 0;
-        int sign = 1;
+        int32_t res = 0;
+        size_t i = 0;
+        int8_t sign = 1;
         for (; str[i] != '\0' && isspace(str[i]); ++i)
             ;
         if (str[i] == '-')
@@ -226,11 +225,11 @@ namespace std
         return sign * res;
     }
 
-    long long int atoll(const char *str)
+    int64_t atoll(const char *str)
     {
-        long long int res = 0;
-        int i = 0;
-        int sign = 1;
+        int64_t res = 0;
+        size_t i = 0;
+        int8_t sign = 1;
         for (; str[i] != '\0' && isspace(str[i]); ++i)
             ;
         if (str[i] == '-')
@@ -255,7 +254,7 @@ namespace std
         return strtod(str, endptr);
     }
 
-    long int strtol(const char *str, char **endptr, int base)
+    int32_t strtol(const char *str, char **endptr, uint8_t base)
     {
         return strtoll(str, endptr, base);
     }
@@ -354,14 +353,14 @@ namespace std
         return 0.0;
     }
 
-    long long int strtoll(const char *str, char **endptr, int base)
+    int64_t strtoll(const char *str, char **endptr, uint8_t base)
     {
         if (base < 0 || base == 1 || base > 36)
             return 0;
 
-        long long int res = 0;
-        int i = 0;
-        int sign = 1;
+        int64_t res = 0;
+        uint32_t i = 0;
+        int8_t sign = 1;
         for (; str[i] != '\0' && isspace(str[i]); i++)
             ;
         if (str[i] == '-')
@@ -413,19 +412,19 @@ namespace std
         return sign * res;
     }
 
-    unsigned long int strtoul(const char *str, char **endptr, int base)
+    uint32_t strtoul(const char *str, char **endptr, uint8_t base)
     {
         return strtoull(str, endptr, base);
     }
 
-    unsigned long long int strtoull(const char *str, char **endptr, int base)
+    uint64_t strtoull(const char *str, char **endptr, uint8_t base)
     {
         if (base <= 0 || base == 1 || base > 36)
             return 0;
 
-        unsigned long long int res = 0;
-        int i = 0;
-        int sign = 1;
+        uint64_t res = 0;
+        uint32_t i = 0;
+        int8_t sign = 1;
         for (; str[i] != '\0' && isspace(str[i]); i++)
             ;
         if (str[i] == '-')
@@ -477,19 +476,19 @@ namespace std
         return sign * res;
     }
 
-    char *itoa(int value, char *str)
+    char *itoa(int64_t value, char *str)
     {
         return itoa(value, str, 10, 1);
     }
 
-    char *itoa(int value, char *str, int base)
+    char *itoa(int64_t value, char *str, uint8_t base)
     {
         return itoa(value, str, base, 1);
     }
 
-    char *itoa(int value, char *str, int base, int prefix)
+    char *itoa(int64_t value, char *str, uint8_t base, uint8_t prefix)
     {
-        int i = 0;
+        uint32_t i = 0;
         bool isNegative = false;
 
         if (value == 0)
@@ -507,7 +506,7 @@ namespace std
 
         while (value != 0)
         {
-            int rem = value % base;
+            uint8_t rem = value % base;
             str[i++] = (rem > 9) ? (rem - 10) + 'a' : rem + '0';
             value = value / base;
         }
@@ -540,19 +539,19 @@ namespace std
         return str;
     }
 
-    char *utoa(unsigned int value, char *str)
+    char *utoa(uint64_t value, char *str)
     {
         return utoa(value, str, 10, 1);
     }
 
-    char *utoa(unsigned int value, char *str, int base)
+    char *utoa(uint64_t value, char *str, uint8_t base)
     {
         return utoa(value, str, base, 1);
     }
 
-    char *utoa(unsigned int value, char *str, int base, int prefix)
+    char *utoa(uint64_t value, char *str, uint8_t base, uint8_t prefix)
     {
-        int i = 0;
+        uint32_t i = 0;
 
         if (value == 0)
         {
@@ -563,7 +562,7 @@ namespace std
 
         while (value != 0)
         {
-            int rem = value % base;
+            uint8_t rem = value % base;
             str[i++] = (rem > 9) ? (rem - 10) + 'a' : rem + '0';
             value = value / base;
         }
@@ -593,10 +592,10 @@ namespace std
         return str;
     }
 
-    char *ftoa(double value, char *str, int afterpoint)
+    char *ftoa(double value, char *str, uint8_t afterpoint)
     {
         // Extract integer part
-        int ipart = (int)value;
+        int64_t ipart = (int64_t)value;
 
         if (value < 0)
         {
@@ -615,21 +614,21 @@ namespace std
             // is needed to handle cases like 233.007
             fpart = fpart * pow(10, afterpoint);
             char fraction[10] = {};
-            utoa((int)fpart, fraction);
+            utoa((uint64_t)fpart, fraction);
             strcat(str, fraction);
         }
         return str;
     }
 
-    static unsigned long int next = 1;
+    static uint32_t next = 1;
 
-    int rand(void)
+    uint32_t rand(void)
     {
         next = next * 1103515245 + 12345;
-        return (unsigned int)(next / 65536) % UINT_MAX;
+        return (uint32_t)(next / 65536) % UINT_MAX;
     }
 
-    void srand(unsigned int seed)
+    void srand(uint32_t seed)
     {
         next = seed;
     }
@@ -637,7 +636,7 @@ namespace std
     void *bsearch(const void *key, const void *base, size_t num, size_t size, int (*compar)(const void *, const void *))
     {
         const char *pivot;
-        int result;
+        uint32_t result;
 
         while (num > 0)
         {
@@ -792,19 +791,19 @@ namespace std
         }
     }
 
-    int abs(int n)
+    uint16_t abs(int16_t n)
     {
         if (n < 0)
             n *= -1;
         return n;
     }
-    long int abs(long int n)
+    uint32_t abs(int32_t n)
     {
         if (n < 0)
             n *= -1;
         return n;
     }
-    long long int abs(long long int n)
+    uint64_t abs(int64_t n)
     {
         if (n < 0)
             n *= -1;

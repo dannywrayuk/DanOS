@@ -1,5 +1,6 @@
 #pragma once
 #include <stddef.h>
+#include <stdint.h>
 
 // The GNU C Compiler in freestanding mode requires the existence of the symbols.
 
@@ -18,4 +19,4 @@ extern "C" int memcmp(const void *ptr1, const void *ptr2, size_t num);
 
 // Fill block of memory
 // Sets the first num bytes of the block of memory pointed by ptr to the specified value (interpreted as an unsigned char).
-extern "C" void *memset(void *ptr, int value, size_t num);
+extern "C" void *memset(void *ptr, uint32_t value, size_t num);
