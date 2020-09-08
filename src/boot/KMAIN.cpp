@@ -1,6 +1,5 @@
 #include <stdint.h>
 #include <io/serial.h>
-#include <std/cstdio.h>
 
 #define MULTIBOOT_MAGIC 0x2BADB002
 
