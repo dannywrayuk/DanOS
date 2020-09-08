@@ -100,8 +100,6 @@ namespace std
 
     // Absolute value
     // Returns the absolute value of parameter n ( /n/ ).
-    uint16_t abs(int16_t n);
-    uint32_t abs(int32_t n);
     uint64_t abs(int64_t n);
 
 } // namespace std

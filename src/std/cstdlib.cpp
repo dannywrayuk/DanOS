@@ -791,18 +791,6 @@ namespace std
         }
     }
 
-    uint16_t abs(int16_t n)
-    {
-        if (n < 0)
-            n *= -1;
-        return n;
-    }
-    uint32_t abs(int32_t n)
-    {
-        if (n < 0)
-            n *= -1;
-        return n;
-    }
     uint64_t abs(int64_t n)
     {
         if (n < 0)
