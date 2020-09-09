@@ -1,14 +1,13 @@
 #include <stdint.h>
+#include <boot/stivale.h>
+
 #include <io/serial.h>
 
-#define MULTIBOOT_MAGIC 0x2BADB002
+#include <std/cstdio.h>
 
-extern "C" void KMAIN(uint32_t magic, uint32_t addr)
+static char stack[4096] = {0};
+
+extern "C" void KMAIN(struct stivale_struct *bootloader_data)
 {
-    // Check Multiboot Magic
-    if (magic != MULTIBOOT_MAGIC)
-    {
-        return;
-    }
     io::initSerial();
 }

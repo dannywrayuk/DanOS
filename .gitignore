@@ -1,9 +1,9 @@
 .vscode
-
+/limine
 /**/*.o
 /**/*.d
-temp
-junk
+/temp
+/junk
 
 danos.bin
 danos.hd
