@@ -14,12 +14,13 @@ CXX= $(HOME)/opt/cross/bin/$(CPU)-elf-g++
 LD= $(CXX:g++=ld)
 
 ASFLAGS=-felf64 -I$(SRCDIR)
-CFLAGS=  -fno-pic                  \
-	-mno-red-zone                  \
-	-mcmodel=kernel                \
-	-ffreestanding                 \
-	-fno-stack-protector           \
-	-fno-omit-frame-pointer        \
+CFLAGS=  -masm=intel  			    \
+	-fno-pic					    \
+	-mno-red-zone                   \
+	-mcmodel=kernel                 \
+	-ffreestanding                  \
+	-fno-stack-protector            \
+	-fno-omit-frame-pointer         \
 	-I$(SRCDIR)
 WARNINGS= #-Wall -Wextra
 LFLAGS= -lgcc \
@@ -94,7 +95,7 @@ clean-loader:
 	@echo "  ..Done.\n"
 
 
-clean-all: clean clean-hd clean-loader
+clean-all: clean clean-hd
 
 new: clean-all all
 
