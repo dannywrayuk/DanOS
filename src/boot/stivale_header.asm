@@ -3,9 +3,17 @@ section .stivalehdr
 align 4
 
 stivale_header:
-    .stack: dq 0xeffff0  ; Stack pointer.
-    .videomode: dw 0     ; VESA.
-    .fbwidth: dw 0       ; Framebuffer info: 0 for default.
-    .fbheight: dw 0      ; Ditto.
-    .fbbpp: dw 0         ; Ditto.
-    .entry: dq 0
+    dq STACK.TOP    ; Stack pointer
+    dw 0            ; Video mode: 0=text, 1=VESA
+    dw 0            ; Framebuffer Width: 0 for default.
+    dw 0            ; Framebuffer Height: 0 for default.
+    dw 0            ; Framebuffer bpp: 0 for default.
+    dq 0            ; entry
+
+section .bss
+
+align 16
+STACK:
+    .BOTTOM:
+    resb 32768
+    .TOP:
