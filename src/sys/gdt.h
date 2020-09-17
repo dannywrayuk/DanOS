@@ -1,6 +1,5 @@
 #pragma once
 #include <stdint.h>
-#include <misc/packed.h>
 
 namespace sys
 {
@@ -39,10 +38,6 @@ namespace sys
         uint64_t address;
     } __attribute__((packed));
 
-    void gdtSetGate(uint32_t num, uint32_t base, uint32_t limit, uint8_t access, uint8_t gran);
-
     void initGDT();
-
-    uint64_t getGDTptr();
 
 } // namespace sys

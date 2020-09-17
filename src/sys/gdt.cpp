@@ -1,4 +1,5 @@
 #include <sys/gdt.h>
+#include <std/cstdio.h>
 
 namespace sys
 {
@@ -36,25 +37,25 @@ namespace sys
         gdt_pointer.size = sizeof(gdt) - 1;
         gdt_pointer.address = (uint64_t)&gdt;
 
-        gdtSetGate(0, 0, 0, 0, 0);                // Null segment
-        gdtSetGate(1, 0, 0xFFFFFFFF, 0x9A, 0xCF); // Code segment
-        gdtSetGate(2, 0, 0xFFFFFFFF, 0x92, 0xCF); // Data segment
-        gdtSetGate(3, 0, 0xFFFFFFFF, 0xFA, 0xCF); // User mode code segment
-        gdtSetGate(4, 0, 0xFFFFFFFF, 0xF2, 0xCF); // User mode data segment
-        gdtSetTSS(0x68, 0x89);                    // TSS segment
+        gdtSetGate(0, 0, 0, 0, 0);       // Null segment
+        gdtSetGate(1, 0, 0, 0x9A, 0x20); // Code segment
+        gdtSetGate(2, 0, 0, 0x92, 0);    // Data segment
+        gdtSetGate(3, 0, 0, 0xF2, 0);    // User mode code segment
+        gdtSetGate(4, 0, 0, 0xFA, 0x20); // User mode data segment
+        gdtSetTSS(0x68, 0x89);           // TSS segment
 
         asm volatile(
             "lgdt %0\n\t"
-            "push rbx\n\t"
-            "mov rbx, rsp\n\t"
+            "push rbp\n\t"
+            "mov rbp, rsp\n\t"
             "push %1\n\t"
-            "push rbx\n\t"
+            "push rbp\n\t"
             "pushfq\n\t"
             "push %2\n\t"
             "push OFFSET 1f\n\t"
             "iretq\n\t"
             "1:\n\t"
-            "pop rbx\n\t"
+            "pop rbp\n\t"
             "mov ds, %1\n\t"
             "mov es, %1\n\t"
             "mov fs, %1\n\t"
@@ -63,10 +64,6 @@ namespace sys
             :
             : "m"(gdt_pointer), "r"((uint64_t)0x10), "r"((uint64_t)0x08)
             : "memory");
-    }
-
-    uint64_t getGDTptr()
-    {
-        return (uint64_t)&gdt_pointer.size;
+        std::printf("GDT\t\t✓\n");
     }
 } // namespace sys
