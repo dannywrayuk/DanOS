@@ -43,9 +43,9 @@ endef
 
 # when using wsl it make no sense to emulate an emulator so qemu flags change
 ifeq ($(ENV),wsl)
-HAXM_FILTER= | findstr.exe /bv /c:"VCPU" /c:"HAX"
+HAXM_FILTER= | grep -Ev "^(HAX is working|VCPU shutdown).*"
 QEMU=qemu-system-x86_64.exe
-QEMUFLAGS= -m 2G -no-reboot -accel hax -serial stdio -drive file=$(KERNELHD),format=raw $(HAXM_FILTER)
+QEMUFLAGS= -m 2G -no-reboot -accel hax -serial stdio -drive file=$(KERNELHD),format=raw  $(HAXM_FILTER)
 else
 QEMU=qemu-system-x86_64
 QEMUFLAGS= -m 2G -no-reboot -serial stdio -drive file=$(KERNELHD),format=raw
