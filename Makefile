@@ -1,39 +1,71 @@
-KERNELBIN=danos.bin
-KERNELHD=danos.hd
-HDSIZE=1G
-SRCDIR=src
-TEMPDIR=temp
-RUNDIR= run
+#
+#		Specify Build Parameters
+KERNEL= danos
 
+BUILD_DIR= build
+
+KERNEL_BIN= $(BUILD_DIR)/$(KERNEL).bin
+KERNEL_HD= $(BUILD_DIR)/$(KERNEL).hd
+
+SRC_DIR= src
+RUN_DIR= run
+
+#		Bootloader Definitions
 LIMINE_URL= https://github.com/limine-bootloader/limine.git
-LIMINE_DIR= limine
+LIMINE_DIR= $(BUILD_DIR)/limine
 LIMINE_BIN= limine.bin
 
-#Provides a switch to run qemu on windows rather than in wsl
-ENV=wsl
+#		WSL Switch
+# If you're running in WSL specify here otherwise leave blank
+ENV= wsl
 
-CPU=x86_64
+ifeq ($(ENV),wsl)
+# Filter console junk from HAXM
+HAXM_FILTER= | grep -Ev "^(HAX is working|VCPU shutdown).*"
+
+# QEMU flags windows
+QEMU=qemu-system-x86_64.exe
+QEMUFLAGS= -m 2G -no-reboot -accel hax -serial stdio -drive file=$(KERNEL_HD),format=raw  $(HAXM_FILTER)
+else
+
+# QEMU flags Linux
+QEMU=qemu-system-x86_64
+QEMUFLAGS= -m 2G -no-reboot -serial stdio -drive file=$(KERNEL_HD),format=raw
+endif
+
+#		Target Architecture
+CPU= x86_64
+
+#		Cross Compiler Location
 AS= nasm
 CXX= $(HOME)/opt/cross/bin/$(CPU)-elf-g++
 LD= $(CXX:g++=ld)
 
-ASFLAGS=-felf64 -I$(SRCDIR)
-CFLAGS=  -masm=intel  			    \
-	-fno-pic					    \
-	-mno-red-zone                   \
-	-mcmodel=kernel                 \
-	-ffreestanding                  \
-	-fno-stack-protector            \
-	-fno-omit-frame-pointer         \
-	-I$(SRCDIR)
+#		Compiler Flags
+ASFLAGS= -felf64 -I$(SRC_DIR)
+CFLAGS= -masm=intel  				    \
+		-fno-pic					    \
+		-mno-red-zone                   \
+		-mcmodel=kernel                 \
+		-ffreestanding                  \
+		-fno-stack-protector            \
+		-fno-omit-frame-pointer         \
+		-I$(SRC_DIR)
 	
 WARNINGS= #-Wall -Wextra
-LFLAGS= -lgcc \
-	-nostdlib \
-	-no-pie   \
-	-z max-page-size=0x1000 \
-	-T $(SRCDIR)/link.ld
+LFLAGS= -lgcc					 \
+		-nostdlib				 \
+		-no-pie					 \
+		-z max-page-size=0x1000	 \
+		-T $(SRC_DIR)/link.ld
 
+#		File Locations
+CFILES= $(shell find $(SRC_DIR) -type f -name '*.cpp')
+ASMFILES= $(shell find $(SRC_DIR) -type f -name '*.asm')
+DEPFILES= $(addprefix $(BUILD_DIR)/,$(CFILES:.cpp=.cpp.d))
+OBJ=$(addprefix $(BUILD_DIR)/, $(CFILES:.cpp=.cpp.o) $(ASMFILES:.asm=.asm.o))
+
+# Housekeeping Macros
 QUIET= 2> /dev/null
 DONE= @echo "\r \e[32m✓\e[39m"
 GAP=@echo ""
@@ -42,63 +74,48 @@ define STAGE
 @echo -n " \e[33m?\e[39m $(1)"
 endef
 
-# when using wsl it make no sense to emulate an emulator so qemu flags change
-ifeq ($(ENV),wsl)
-HAXM_FILTER= | grep -Ev "^(HAX is working|VCPU shutdown).*"
-QEMU=qemu-system-x86_64.exe
-QEMUFLAGS= -m 2G -no-reboot -accel hax -serial stdio -drive file=$(KERNELHD),format=raw  $(HAXM_FILTER)
-else
-QEMU=qemu-system-x86_64
-QEMUFLAGS= -m 2G -no-reboot -serial stdio -drive file=$(KERNELHD),format=raw
-endif
 
+.PHONY: all clean clean-hd clean-loader clean-sys-h clean-all stub-headers new run
 
-ifeq ($(testing), on)
-CFILES= $(shell find $(SRCDIR) -type f -name '*.cpp')
-else
-CFILES= $(shell find $(SRCDIR) -type f -name '*.cpp' -not -path 'src/test/*')
-endif
+all: $(KERNEL_HD) run
 
-ASMFILES= $(shell find $(SRCDIR) -type f -name '*.asm')
-DEPFILES= $(addprefix $(TEMPDIR)/,$(CFILES:.cpp=.cpp.d))
-OBJ=$(addprefix $(TEMPDIR)/, $(CFILES:.cpp=.cpp.o) $(ASMFILES:.asm=.asm.o))
-
-
-.PHONY: all clean clean-hd clean-loader clean-all new run
-
-all: $(KERNELHD) run
-
-$(KERNELBIN): $(OBJ)
+#		Link Binary
+$(KERNEL_BIN): $(OBJ)
 	$(GAP)
-	$(call STAGE, Building: $(KERNELBIN))
-	@$(CXX) $(OBJ) $(LFLAGS) -o $(KERNELBIN)
+	$(call STAGE, Building: $(KERNEL_BIN))
+	@$(CXX) $(OBJ) $(LFLAGS) -o $(KERNEL_BIN)
 	$(DONE)
 
-$(TEMPDIR)/%.cpp.o: %.cpp
+#		Compile C++
+$(BUILD_DIR)/%.cpp.o: %.cpp
 	$(call STAGE, Compiling: $<)
 	@mkdir -p $(@D)
 	@$(CXX) $(CFLAGS) -MMD -c $< -o $@
 	$(DONE)
 
-$(TEMPDIR)/%.asm.o: %.asm
+#		Complie ASM
+$(BUILD_DIR)/%.asm.o: %.asm
 	$(call STAGE, Compiling: $<)
 	@$(AS) $(ASFLAGS)  $< -o $@
 	$(DONE)
 
+# tie loose end
 %.asm:
 
-$(KERNELHD): $(LIMINE_DIR) $(KERNELBIN) clean-hd
+#		Build Kernel Image
+$(KERNEL_HD): $(LIMINE_DIR) $(KERNEL_BIN) clean-hd
 	$(call STAGE, Building HDD image.)
-	@dd if=/dev/zero bs=1M count=0 seek=64 of=$(KERNELHD) $(QUIET)
-	@parted -s $(KERNELHD) mklabel msdos  $(QUIET)
-	@parted -s $(KERNELHD) mkpart primary 1 100%  $(QUIET)
-	@echfs-utils -m -p0 $(KERNELHD) quick-format 32768 
-	@echfs-utils -m -p0 $(KERNELHD) import $(KERNELBIN) $(KERNELBIN) 
-	@echfs-utils -m -p0 $(KERNELHD) import $(RUNDIR)/limine.cfg limine.cfg 
-	
-	@$(LIMINE_DIR)/limine-install $(LIMINE_DIR)/$(LIMINE_BIN) $(KERNELHD) 
+	@dd if=/dev/zero bs=1M count=0 seek=64 of=$(KERNEL_HD) $(QUIET)
+	@parted -s $(KERNEL_HD) mklabel msdos  $(QUIET)
+	@parted -s $(KERNEL_HD) mkpart primary 1 100%  $(QUIET)
+	@echfs-utils -m -p0 $(KERNEL_HD) quick-format 32768 
+	@echfs-utils -m -p0 $(KERNEL_HD) import $(KERNEL_BIN) $(KERNEL).bin
+	@echfs-utils -m -p0 $(KERNEL_HD) import $(RUN_DIR)/limine.cfg limine.cfg 
+# install bootloader 
+	@$(LIMINE_DIR)/limine-install $(LIMINE_DIR)/$(LIMINE_BIN) $(KERNEL_HD) 
 	$(DONE)
 
+#		Build Bootloader
 $(LIMINE_DIR):
 	$(call STAGE, Building Bootloader.)
 	@git clone $(LIMINE_URL) $(LIMINE_DIR)  $(QUIET)
@@ -106,15 +123,17 @@ $(LIMINE_DIR):
 	$(DONE)
 	$(GAP)
 
+
+#		Cleaning
 clean: 
 	$(call STAGE, Cleaning temporary files.)
-	@rm -f  $(OBJ) $(KERNELBIN) $(DEPFILES)
-	@rm -d -r -f $(TEMPDIR)
+	@rm -f  $(OBJ) $(KERNEL_BIN) $(DEPFILES)
+	@rm -d -r -f $(BUILD_DIR)/$(SRC_DIR)
 	$(DONE)
 
 clean-hd:
 	$(call STAGE, Cleaning hard disk.)
-	@rm -f $(KERNELHD)
+	@rm -f $(KERNEL_HD)
 	$(DONE)
 	
 
@@ -124,12 +143,17 @@ clean-loader:
 	$(DONE)
 
 
-clean-all: clean clean-hd clean-loader
+
+clean-all: 
+	$(call STAGE, Cleaning All Build files.)
+	@rm -d -r -f $(BUILD_DIR)
+	$(DONE)
 	$(GAP)
 
+#		Clean and Build
+new: clean all
 
-new: clean-all all
-
-run: $(KERNELHD)
+#		Run!
+run: $(KERNEL_HD)
 	@echo "\nRunning...\n"
 	@$(QEMU) $(QEMUFLAGS)
