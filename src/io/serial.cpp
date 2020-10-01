@@ -2,6 +2,8 @@
 #include <io/port.h>
 #include <std/cstdio.h>
 
+#include <io/ansi_colours.h>
+
 namespace io
 {
     void initSerial()
@@ -13,7 +15,7 @@ namespace io
         io::outb(COMPORT1 + 3, 0x03); // 8 bits, no parity, one stop bit
         io::outb(COMPORT1 + 2, 0xC7); // Enable FIFO, clear them, with 14-byte threshold
         io::outb(COMPORT1 + 4, 0x0B); // IRQs enabled, RTS/DSR set
-        std::printf("SERIAL\t\t✓\n");
+        std::printf(" %Cg✓%C0  Serial Logging.\n");
     }
 
     int isTransmitEmpty()

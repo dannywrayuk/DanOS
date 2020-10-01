@@ -64,6 +64,6 @@ namespace sys
             :
             : "m"(gdt_pointer), "r"((uint64_t)0x10), "r"((uint64_t)0x08)
             : "memory");
-        std::printf("GDT\t\t✓\n");
+        std::printf(" %Cg✓%C0  GDT.\n");
     }
 } // namespace sys
