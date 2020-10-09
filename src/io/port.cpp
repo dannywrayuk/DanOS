@@ -21,4 +21,9 @@ namespace io
                      :);
     }
 
+    void wait()
+    {
+        io::outb(0x80, 0x00);
+    }
+
 } // namespace io
