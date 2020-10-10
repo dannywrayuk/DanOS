@@ -3,13 +3,13 @@
 #include <io/port.h>
 #include <sys/pic.h>
 #include <std/cstdio.h>
+#include <sys/interrupts.h>
 
 uint64_t t = 0;
 uint16_t freq = 200;
 
 extern "C" void tick_handler()
 {
-    sys::picEOI(0x20);
     t++;
 }
 
@@ -46,6 +46,8 @@ namespace sys
         io::outb(0x43, 0x36);
         io::wait();
         PITSetFreq(0xc8);
+        sys::registerinterruptHandler(0x0, tick_handler);
         sys::picSetMask(0x00, 0x00);
     }
+
 } // namespace sys

@@ -2,10 +2,24 @@
 #include <mem/cmem.h>
 #include <io/port.h>
 #include <sys/exceptions.h>
+#include <sys/interrupts.h>
 
 #include <std/cstdio.h>
 #include <sys/pic.h>
 #include <sys/pit.h>
+
+extern "C" void key_handler()
+{
+    uint8_t status = io::inb(0x64);
+    if (status & 0x01)
+    {
+        int8_t keycode = io::inb(0x60);
+        if (keycode > 0)
+        {
+            std::printf("keypress\n");
+        }
+    }
+}
 
 namespace sys
 {
@@ -32,30 +46,37 @@ namespace sys
         idt_pointer.address = (uint64_t)&idt;
 
         memset(&idt, 0, sizeof(idt));
+#define ISR(x) isr##x##Handler
+#define RegisterISR(x, ist) registerInterrupt(x, ISR(x), ist, 0x8e);
+        RegisterISR(0, 0);
+        RegisterISR(1, 0);
+        RegisterISR(2, 0);
+        RegisterISR(3, 0);
+        RegisterISR(4, 0);
+        RegisterISR(5, 0);
+        RegisterISR(6, 0);
+        RegisterISR(7, 0);
+        RegisterISR(8, 1);
+        RegisterISR(10, 0);
+        RegisterISR(11, 0);
+        RegisterISR(12, 0);
+        RegisterISR(13, 0);
+        RegisterISR(14, 0);
+        RegisterISR(16, 0);
+        RegisterISR(17, 0);
+        RegisterISR(18, 0);
+        RegisterISR(19, 0);
+        RegisterISR(20, 0);
+        RegisterISR(30, 0);
+#undef ISR
+#undef RegisterISR
 
-        registerInterrupt(0x00, div0_handler, 0, 0x8e);
-        registerInterrupt(0x01, debug_handler, 0, 0x8e);
-        registerInterrupt(0x02, nmi_handler, 0, 0x8e);
-        registerInterrupt(0x03, breakpoint_handler, 0, 0x8e);
-        registerInterrupt(0x04, overflow_handler, 0, 0x8e);
-        registerInterrupt(0x05, bound_range_handler, 0, 0x8e);
-        registerInterrupt(0x06, inv_opcode_handler, 0, 0x8e);
-        registerInterrupt(0x07, no_dev_handler, 0, 0x8e);
-        registerInterrupt(0x08, double_fault_handler, 1, 0x8e);
-        registerInterrupt(0x0a, inv_tss_handler, 0, 0x8e);
-        registerInterrupt(0x0b, no_segment_handler, 0, 0x8e);
-        registerInterrupt(0x0c, ss_fault_handler, 0, 0x8e);
-        registerInterrupt(0x0d, gpf_handler, 0, 0x8e);
-        registerInterrupt(0x0e, page_fault_handler, 0, 0x8e);
-        registerInterrupt(0x10, x87_fp_handler, 0, 0x8e);
-        registerInterrupt(0x11, alignment_check_handler, 0, 0x8e);
-        registerInterrupt(0x12, machine_check_handler, 0, 0x8e);
-        registerInterrupt(0x13, simd_fp_handler, 0, 0x8e);
-        registerInterrupt(0x14, virt_handler, 0, 0x8e);
-        registerInterrupt(0x1e, security_handler, 0, 0x8e);
-
-        registerInterrupt(0x20, irq0_handler, 0, 0x8e);
-        registerInterrupt(0x21, irq1_handler, 0, 0x8e);
+#define IRQ(x) irq##x##Handler
+#define RegisterIRQ(x) registerInterrupt(0x20 + x, IRQ(x), 0, 0x8e);
+        RegisterIRQ(0);
+        RegisterIRQ(1);
+#undef IRQ
+#undef RegisterIRQ
 
         asm volatile(
             "lidt %0"
@@ -64,20 +85,7 @@ namespace sys
 
         asm volatile("sti");
         std::printf(" %Cg✓%C0  IDT.\n");
+        sys::registerinterruptHandler(0x1, key_handler);
     }
 
 } // namespace sys
-
-extern "C" void key_handler()
-{
-    sys::picEOI(0x20);
-    uint8_t status = io::inb(0x64);
-    if (status & 0x01)
-    {
-        int8_t keycode = io::inb(0x60);
-        if (keycode > 0)
-        {
-            std::printf("keypress\n");
-        }
-    }
-}

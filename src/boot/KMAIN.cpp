@@ -13,7 +13,6 @@ extern "C" void KMAIN(stivale_struct *bootloader_data)
     sys::initGDT();
     sys::initIDT();
     sys::initPIC();
-    sys::initPIT();
     while (1)
         ;
 }

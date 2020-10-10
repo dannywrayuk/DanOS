@@ -25,26 +25,25 @@ struct regs_t
     uint64_t ss;
 };
 
-extern "C" void div0_handler();
-extern "C" void debug_handler();
-extern "C" void nmi_handler();
-extern "C" void breakpoint_handler();
-extern "C" void overflow_handler();
-extern "C" void bound_range_handler();
-extern "C" void inv_opcode_handler();
-extern "C" void no_dev_handler();
-extern "C" void double_fault_handler();
-extern "C" void inv_tss_handler();
-extern "C" void no_segment_handler();
-extern "C" void ss_fault_handler();
-extern "C" void gpf_handler();
-extern "C" void page_fault_handler();
-extern "C" void x87_fp_handler();
-extern "C" void alignment_check_handler();
-extern "C" void machine_check_handler();
-extern "C" void simd_fp_handler();
-extern "C" void virt_handler();
-extern "C" void security_handler();
-
-extern "C" void irq0_handler();
-extern "C" void irq1_handler();
+#define ISR(x) extern "C" void isr##x##Handler();
+ISR(0);
+ISR(1);
+ISR(2);
+ISR(3);
+ISR(4);
+ISR(5);
+ISR(6);
+ISR(7);
+ISR(8);
+ISR(10);
+ISR(11);
+ISR(12);
+ISR(13);
+ISR(14);
+ISR(16);
+ISR(17);
+ISR(18);
+ISR(19);
+ISR(20);
+ISR(30);
+#undef ISR

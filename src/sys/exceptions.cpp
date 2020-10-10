@@ -35,7 +35,7 @@ static const char *exceptions[] = {
     "",
     "Security"};
 
-extern "C" void exception_handler(int exception, regs_t *regs, size_t error_code)
+extern "C" void exceptionHandler(int exception, regs_t *regs, size_t error_code)
 {
     std::printf("Oops! %s exception.\n", exceptions[exception]);
     asm volatile("hlt");
