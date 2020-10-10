@@ -1,10 +1,14 @@
 #pragma once
-typedef void (*handlerFunction)();
-
+#include <stdint.h>
 namespace sys
 {
+    namespace interrupt
+    {
+        typedef void (*handlerFunction)();
 
-    void registerinterruptHandler(int interrupt, handlerFunction handler);
+        void registerHandler(uint8_t interrupt, handlerFunction handler);
+
+    } // namespace interrupt
 
 } // namespace sys
 

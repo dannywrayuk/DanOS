@@ -2,27 +2,28 @@
 #include <sys/pic.h>
 #include <std/cstdio.h>
 
-handlerFunction handlers[0xff];
+sys::interrupt::handlerFunction handlers[0xff];
 
-extern "C" void interruptHandler(int interrupt)
+extern "C" void interruptHandler(uint8_t interrupt)
 {
-    if (interrupt >= 0 && interrupt < 0xff)
+    if (handlers[interrupt])
     {
-        if (handlers[interrupt])
-        {
-            handlerFunction handler = handlers[interrupt];
-            handler();
-        }
+        sys::interrupt::handlerFunction handler = handlers[interrupt];
+        handler();
     }
-    sys::picEOI(interrupt);
+
+    sys::pic::EOI(interrupt);
 }
 
 namespace sys
 {
-
-    void registerinterruptHandler(int interrupt, handlerFunction handler)
+    namespace interrupt
     {
-        handlers[interrupt] = handler;
-    }
+        void registerHandler(uint8_t interrupt, handlerFunction handler)
+        {
+            handlers[interrupt] = handler;
+        }
+
+    } // namespace interrupt
 
 } // namespace sys

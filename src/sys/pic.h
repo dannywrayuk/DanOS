@@ -3,12 +3,15 @@
 
 namespace sys
 {
+    namespace pic
+    {
+        void EOI(uint8_t vec);
+        void remap(uint8_t pic0_offset, uint8_t pic1_offset);
+        void setMask(uint8_t line, int status);
+        void maskAll();
 
-    void picEOI(uint8_t vec);
-    void picRemap(uint8_t pic0_offset, uint8_t pic1_offset);
-    void picSetMask(uint8_t line, int status);
-    void picMaskAll();
+        void init();
 
-    void initPIC();
+    } // namespace pic
 
 } // namespace sys

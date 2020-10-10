@@ -1,17 +1,19 @@
 #pragma once
 #include <stddef.h>
 
-#define COMPORT1 0x3f8
-
 namespace io
 {
-    void initSerial();
+    namespace serial
+    {
+        int isTransmitEmpty();
 
-    int isTransmitEmpty();
+        void out(char a);
+        void out(char *a);
+        void out(const char *a);
+        void outN(char *a, size_t num);
 
-    void serialOut(char a);
-    void serialOut(char *a);
-    void serialOut(const char *a);
-    void serialnOut(char *a, size_t num);
+        void init();
+
+    } // namespace serial
 
 } // namespace io

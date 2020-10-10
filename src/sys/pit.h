@@ -3,8 +3,13 @@
 
 namespace sys
 {
-    void initPIT();
-    uint64_t getTicks();
-    void PITSetFreq(uint16_t f);
+    namespace pit
+    {
+        uint64_t getTicks();
+        void PITSetFreq(uint16_t f);
+
+        void initPIT();
+
+    } // namespace pit
 
 } // namespace sys

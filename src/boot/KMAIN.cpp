@@ -9,10 +9,10 @@
 
 extern "C" void KMAIN(stivale_struct *bootloader_data)
 {
-    io::initSerial();
-    sys::initGDT();
-    sys::initIDT();
-    sys::initPIC();
+    io::serial::init();
+    sys::gdt::init();
+    sys::idt::init();
+    sys::pic::init();
     while (1)
         ;
 }
