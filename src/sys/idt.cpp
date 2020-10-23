@@ -25,7 +25,7 @@ namespace sys
 {
     namespace idt
     {
-        static struct entry idt[0xff];
+        static struct entry idt[0x100];
         static struct pointer pointer;
 
         void registerInterrupt(uint8_t num, void (*handler)(), uint8_t ist, uint8_t type)
@@ -78,7 +78,6 @@ namespace sys
             RegisterIRQ(1);
 #undef IRQ
 #undef RegisterIRQ
-
             asm volatile(
                 "lidt %0"
                 :

@@ -25,7 +25,7 @@ HAXM_FILTER= | grep -Ev "^(HAX is working|VCPU shutdown).*"
 
 # QEMU flags windows
 QEMU=qemu-system-x86_64.exe
-QEMUFLAGS= -m 2G -no-reboot -accel hax -serial stdio -drive file=$(KERNEL_HD),format=raw  $(HAXM_FILTER)
+QEMUFLAGS= -m 2G -no-reboot -no-shutdown -accel hax -serial stdio -drive file=$(KERNEL_HD),format=raw  $(HAXM_FILTER)
 else
 
 # QEMU flags Linux

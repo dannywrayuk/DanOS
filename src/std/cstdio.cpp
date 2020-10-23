@@ -34,28 +34,28 @@ namespace std
         // Signed decimal int
         case 'd':
         case 'i':
-            std::itoa(va_arg(*argpp, int32_t), buffer, 10, prefix);
+            std::itoa(va_arg(*argpp, int64_t), buffer, 10, prefix);
             break;
 
         // Unsigned binary int
         case 'b':
-            std::utoa(va_arg(*argpp, uint32_t), buffer, 2, prefix);
+            std::utoa(va_arg(*argpp, uint64_t), buffer, 2, prefix);
             break;
 
         // Unsigned decimal int
         case 'u':
-            std::utoa(va_arg(*argpp, uint32_t), buffer, 10, prefix);
+            std::utoa(va_arg(*argpp, uint64_t), buffer, 10, prefix);
             break;
 
         // Unsigned octal int
         case 'o':
-            std::utoa(va_arg(*argpp, uint32_t), buffer, 8, prefix);
+            std::utoa(va_arg(*argpp, uint64_t), buffer, 8, prefix);
             break;
 
         // Unsigned hex int
         case 'x':
         case 'X':
-            std::utoa(va_arg(*argpp, uint32_t), buffer, 16, prefix);
+            std::utoa(va_arg(*argpp, uint64_t), buffer, 16, prefix);
             break;
 
         // Decimal float
