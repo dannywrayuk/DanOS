@@ -1,19 +1,15 @@
 #pragma once
 #include <stddef.h>
 
-namespace io
+namespace serial
 {
-    namespace serial
-    {
-        int isTransmitEmpty();
+    int isTransmitEmpty();
 
-        void out(char a);
-        void out(char *a);
-        void out(const char *a);
-        void outN(char *a, size_t num);
+    void out(char a);
+    void out(char *a);
+    void out(const char *a);
+    void outN(char *a, size_t num);
 
-        void init();
+    void init();
 
-    } // namespace serial
-
-} // namespace io
+} // namespace serial

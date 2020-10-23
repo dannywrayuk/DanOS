@@ -1,16 +1,13 @@
 #pragma once
 #include <stdint.h>
-namespace sys
+
+namespace interrupt
 {
-    namespace interrupt
-    {
-        typedef void (*handlerFunction)();
+    typedef void (*handlerFunction)();
 
-        void registerHandler(uint8_t interrupt, handlerFunction handler);
+    void registerHandler(uint8_t interrupt, handlerFunction handler);
 
-    } // namespace interrupt
-
-} // namespace sys
+} // namespace interrupt
 
 #define IRQ(x) extern "C" void irq##x##Handler();
 IRQ(0);

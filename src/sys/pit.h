@@ -1,15 +1,11 @@
 #pragma once
 #include <stdint.h>
 
-namespace sys
+namespace pit
 {
-    namespace pit
-    {
-        uint64_t getTicks();
-        void PITSetFreq(uint16_t f);
+    uint64_t getTicks();
+    void PITSetFreq(uint16_t f);
 
-        void initPIT();
+    void initPIT();
 
-    } // namespace pit
-
-} // namespace sys
+} // namespace pit
