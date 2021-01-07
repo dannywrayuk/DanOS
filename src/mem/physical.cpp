@@ -1,64 +1,24 @@
 #include <mem/physical.h>
 #include <std/cstdio.h>
-#include <lib/bit.h>
+#include <mem/cmem.h>
+#include <lib/bitmap.h>
 
 namespace phys
 {
 
-    uint32_t *memoryBitmap;
-    uint32_t initialBitmap[] = {0xffffff7f};
-    uint32_t *tempBitmap;
+    bitmap_t *bitmap;
 
-    size_t bitmapEntries = 32;
-
-    size_t totalPages = 1;
-    size_t freePages = 1;
-
-    __attribute__((always_inline)) static inline int readBitmap(size_t i)
+    void *malloc(size_t pageCount)
     {
-        i -= BITMAP_BASE;
-
-        return testBit(memoryBitmap, i);
-    }
-
-    __attribute__((always_inline)) static inline void setBitmap(size_t i, size_t count)
-    {
-        i -= BITMAP_BASE;
-
-        freePages -= count;
-
-        size_t f = i + count;
-        for (size_t j = i; j < f; j++)
-            setBit(memoryBitmap, j);
-    }
-
-    __attribute__((always_inline)) static inline void unsetBitmap(size_t i, size_t count)
-    {
-        i -= BITMAP_BASE;
-
-        freePages += count;
-
-        size_t f = i + count;
-        for (size_t j = i; j < f; j++)
-            resetBit(memoryBitmap, j);
-    }
-
-    void *alloc(size_t pageCount)
-    {
-
-        size_t initialPageCount = pageCount;
-
-        size_t i;
-        for (i = BITMAP_BASE; i < BITMAP_BASE + bitmapEntries;)
+        size_t initialPageCount = bitmap->pages;
+        for (size_t i = 0; i < bitmap->pages * bitmap::bitsPerPage;)
         {
-            if (!readBitmap(i++))
+            if (!bitmap::get(bitmap, i++))
             {
                 if (!--initialPageCount)
                 {
                     size_t start = i - pageCount;
-                    setBitmap(start, pageCount);
-
-                    // Return the physical address that represents the start of this physical page(s).
+                    bitmap::set(bitmap, start, 1, pageCount);
                     return (void *)(start * PAGE_SIZE);
                 }
             }
@@ -67,45 +27,95 @@ namespace phys
                 initialPageCount = pageCount;
             }
         }
-        std::printf("alloc returning 0\n");
+        std::printf("malloc returning 0\n");
         return 0;
     }
 
-    /* Allocate physical memory and zero it out. */
-    void *allocz(size_t pageCount)
+    void free(void *ptr, size_t pageCount)
     {
-        void *ptr = alloc(pageCount);
+        size_t start = (size_t)ptr / PAGE_SIZE;
+        bitmap::set(bitmap, start, 0, pageCount);
+    }
+
+    void *calloc(size_t pageCount)
+    {
+        void *ptr = malloc(pageCount);
         if (!ptr)
             return NULL;
+
         uint64_t *pages = (uint64_t *)((size_t)ptr + MEM_PHYS_OFFSET);
 
         for (size_t i = 0; i < (pageCount * PAGE_SIZE) / sizeof(uint64_t); i++)
         {
             pages[i] = 0;
         }
-
         return ptr;
     }
 
-    void free(void *ptr, size_t pageCount)
+    void *realloc(void *ptr, size_t pageCount, size_t newPageCount)
     {
-        size_t start = (size_t)ptr / PAGE_SIZE;
-        unsetBitmap(start, pageCount);
+        if (!ptr)
+            return malloc(newPageCount);
+        if (!newPageCount)
+        {
+            free(ptr, pageCount);
+            return (void *)0;
+        }
+
+        if (pageCount == newPageCount)
+            return ptr;
+
+        void *newPtr = malloc(newPageCount);
+        if (newPtr == 0)
+            return (void *)0;
+
+        if (pageCount > newPageCount)
+            memcpy(newPtr, (void *)ptr, newPageCount * PAGE_SIZE);
+        else
+            memcpy(newPtr, (void *)ptr, pageCount * PAGE_SIZE);
+
+        free(ptr, pageCount);
+
+        return newPtr;
+    }
+
+    void *recalloc(void *ptr, size_t pageCount, size_t newPageCount)
+    {
+        if (!ptr)
+            return calloc(newPageCount);
+        if (!newPageCount)
+        {
+            free(ptr, pageCount);
+            return (void *)0;
+        }
+
+        if (pageCount == newPageCount)
+            return ptr;
+
+        void *newPtr = calloc(newPageCount);
+        if (newPtr == 0)
+            return (void *)0;
+
+        if (pageCount > newPageCount)
+            memcpy(newPtr, (void *)ptr, newPageCount * PAGE_SIZE);
+        else
+            memcpy(newPtr, (void *)ptr, pageCount * PAGE_SIZE);
+
+        free(ptr, pageCount);
+
+        return newPtr;
     }
 
     void init(stivale_memmap *memmap)
     {
-        memoryBitmap = initialBitmap;
-        if (!(tempBitmap = (uint32_t *)allocz(BMREALLOC_STEP)))
-        {
-            std::printf("allocz error\n");
-            return;
-        }
+        bitmap = bitmap::create((void *)MEMORY_BASE, 1);
+        bitmap::setInt(bitmap, 0, 0xffffff7f);
 
-        tempBitmap = (uint32_t *)((size_t)tempBitmap + MEM_PHYS_OFFSET);
+        if ((size_t)bitmap->location <= MEM_PHYS_OFFSET)
+            bitmap->location = (uint32_t *)((size_t)bitmap->location + MEM_PHYS_OFFSET);
 
-        for (size_t i = 0; i < (BMREALLOC_STEP * PAGE_SIZE) / sizeof(uint32_t); i++)
-            tempBitmap[i] = 0xffffffff;
+        for (size_t i = 1; i < bitmap->pages * bitmap::intsPerPage; i++)
+            bitmap::setInt(bitmap, i, 0xFFFFFFFF);
 
         for (size_t i = 0; i < memmap->entries; i++)
         {
@@ -128,39 +138,22 @@ namespace phys
 
                 size_t page = addr / PAGE_SIZE;
 
-                if (addr < (MEMORY_BASE + PAGE_SIZE /* bitmap */))
+                if (addr < (MEMORY_BASE + PAGE_SIZE))
                     continue;
 
-                if (addr >= (MEMORY_BASE + bitmapEntries * PAGE_SIZE))
+                if (addr >= (MEMORY_BASE + bitmap->pages * bitmap::bitsPerPage * PAGE_SIZE))
                 {
-                    /* Reallocate bitmap */
-                    size_t currentBitmapSize = ((bitmapEntries / 32) * sizeof(uint32_t)) / PAGE_SIZE;
-                    size_t newBitmapSize = currentBitmapSize + BMREALLOC_STEP;
-                    if (!(tempBitmap = (uint32_t *)allocz(newBitmapSize)))
-                    {
-                        return;
-                    }
-                    tempBitmap = (uint32_t *)((size_t)tempBitmap + MEM_PHYS_OFFSET);
-                    /* Copy over previous bitmap */
-                    for (size_t i = 0;
-                         i < (currentBitmapSize * PAGE_SIZE) / sizeof(uint32_t);
-                         i++)
-                        tempBitmap[i] = memoryBitmap[i];
-                    /* Fill in the rest */
-                    for (size_t i = (currentBitmapSize * PAGE_SIZE) / sizeof(uint32_t);
-                         i < (newBitmapSize * PAGE_SIZE) / sizeof(uint32_t);
-                         i++)
-                        tempBitmap[i] = 0xffffffff;
-                    bitmapEntries += ((PAGE_SIZE / sizeof(uint32_t)) * 32) * BMREALLOC_STEP;
-                    uint32_t *oldBitmap = (uint32_t *)((size_t)memoryBitmap - MEM_PHYS_OFFSET);
-                    memoryBitmap = tempBitmap;
-                    free(oldBitmap, currentBitmapSize);
+                    bitmap::resize(bitmap, bitmap->pages + 1);
+                    if ((size_t)bitmap->location <= MEM_PHYS_OFFSET)
+                        bitmap->location = (uint32_t *)((size_t)bitmap->location + MEM_PHYS_OFFSET);
+
+                    for (size_t i = bitmap::intsPerPage * (bitmap->pages - 1); i < bitmap::intsPerPage * bitmap->pages; i++)
+                        bitmap::setInt(bitmap, i, 0xFFFFFFFF);
                 }
 
                 if (entry->type == USABLE)
                 {
-                    totalPages++;
-                    unsetBitmap(page, 1);
+                    bitmap::set(bitmap, page, 0);
                 }
             }
         }

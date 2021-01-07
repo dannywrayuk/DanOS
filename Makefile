@@ -38,12 +38,11 @@ CPU= x86_64
 
 #		Cross Compiler Location
 AS= nasm
-CXX= $(HOME)/opt/cross/bin/$(CPU)-elf-g++
-LD= $(CXX:g++=ld)
+CXX= ./cc/opt/cross/bin/$(CPU)-elf-g++
 
 #		Compiler Flags
 ASFLAGS= -felf64 -I$(SRC_DIR)
-CFLAGS= -masm=intel  				    \
+CFLAGS=	-masm=intel  				    \
 		-fno-pic					    \
 		-mno-red-zone                   \
 		-mcmodel=kernel                 \
@@ -53,8 +52,7 @@ CFLAGS= -masm=intel  				    \
 		-I$(SRC_DIR)
 	
 WARNINGS= #-Wall -Wextra
-LFLAGS= -lgcc					 \
-		-nostdlib				 \
+LFLAGS= -nostdlib				 \
 		-no-pie					 \
 		-z max-page-size=0x1000	 \
 		-T $(SRC_DIR)/link.ld

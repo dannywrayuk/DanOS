@@ -141,7 +141,7 @@ namespace virt
         }
         else
         {
-            pdpt = (pdpt_t *)((char *)phys::allocz(1) + MEM_PHYS_OFFSET);
+            pdpt = (pdpt_t *)((char *)phys::calloc(1) + MEM_PHYS_OFFSET);
             if ((size_t)pdpt == MEM_PHYS_OFFSET)
             {
                 std::printf("MapPage failed\n");
@@ -156,7 +156,7 @@ namespace virt
         }
         else
         {
-            pd = (pdpt_t *)((char *)phys::allocz(1) + MEM_PHYS_OFFSET);
+            pd = (pdpt_t *)((char *)phys::calloc(1) + MEM_PHYS_OFFSET);
             if ((size_t)pd == MEM_PHYS_OFFSET)
             {
                 std::printf("MapPage failed\n");
@@ -171,7 +171,7 @@ namespace virt
         }
         else
         {
-            pt = (pt_t *)((char *)phys::allocz(1) + MEM_PHYS_OFFSET);
+            pt = (pt_t *)((char *)phys::calloc(1) + MEM_PHYS_OFFSET);
             if ((size_t)pt == MEM_PHYS_OFFSET)
             {
                 std::printf("MapPage failed\n");
@@ -192,7 +192,7 @@ namespace virt
 
     void init(stivale_memmap *memmap)
     {
-        kernelPageMap = (pml4_t *)((char *)phys::allocz(1) + MEM_PHYS_OFFSET);
+        kernelPageMap = (pml4_t *)((char *)phys::calloc(1) + MEM_PHYS_OFFSET);
         for (size_t i = 0; i < (0x2000000 / PAGE_SIZE); i++)
         {
             size_t addr = i * PAGE_SIZE;

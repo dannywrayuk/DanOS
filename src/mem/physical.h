@@ -8,15 +8,18 @@
 #define BITMAP_BASE (MEMORY_BASE / PAGE_SIZE)
 #define MEM_PHYS_OFFSET ((size_t)0xffff800000000000)
 
-#define BMREALLOC_STEP 1
-
 namespace phys
 {
+
     void init(stivale_memmap *memmap);
 
-    void *allocz(size_t pageCount);
+    void *calloc(size_t pageCount);
 
-    void *alloc(size_t pageCount);
+    void *malloc(size_t pageCount);
+
+    void *realloc(void *ptr, size_t pageCount, size_t newPageCount);
+
+    void *recalloc(void *ptr, size_t pageCount, size_t newPageCount);
 
     void free(void *ptr, size_t pageCount);
 
