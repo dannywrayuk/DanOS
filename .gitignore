@@ -1,9 +1,3 @@
 .vscode
-/limine
-/**/*.o
-/**/*.d
-/temp
-/junk
-
-danos.bin
-danos.hd
+/build
+/cc

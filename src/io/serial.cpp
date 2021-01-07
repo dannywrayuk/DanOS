@@ -2,9 +2,48 @@
 #include <io/port.h>
 #include <std/cstdio.h>
 
-namespace io
+#include <io/ansi_colours.h>
+
+#define COMPORT1 0x3f8
+
+namespace serial
 {
-    void initSerial()
+    int isTransmitEmpty()
+    {
+        return io::inb(COMPORT1 + 5) & 0x20;
+    }
+
+    void out(char a)
+    {
+        while (isTransmitEmpty() == 0)
+            ;
+        io::outb(COMPORT1, a);
+    }
+
+    void out(const char *a)
+    {
+        out((char *)a);
+    }
+
+    void out(char *a)
+    {
+        int x = 0;
+        while (a[x] != '\0')
+        {
+            out(a[x]);
+            x++;
+        }
+    }
+    void outN(char *a, size_t num)
+    {
+        int x = 0;
+        while (a[x] != '\0' && x < num)
+        {
+            out(a[x]);
+            x++;
+        }
+    }
+    void init()
     {
         io::outb(COMPORT1 + 1, 0x00); // Disable all interrupts
         io::outb(COMPORT1 + 3, 0x80); // Enable DLAB (set baud rate divisor)
@@ -13,42 +52,7 @@ namespace io
         io::outb(COMPORT1 + 3, 0x03); // 8 bits, no parity, one stop bit
         io::outb(COMPORT1 + 2, 0xC7); // Enable FIFO, clear them, with 14-byte threshold
         io::outb(COMPORT1 + 4, 0x0B); // IRQs enabled, RTS/DSR set
-        std::printf("Serial initialised.\n");
+        std::printf(" %Cg✓%C0  Serial Logging.\n");
     }
 
-    int isTransmitEmpty()
-    {
-        return io::inb(COMPORT1 + 5) & 0x20;
-    }
-
-    void serialOut(char a)
-    {
-        while (isTransmitEmpty() == 0)
-            ;
-        io::outb(COMPORT1, a);
-    }
-
-    void serialOut(const char *a)
-    {
-        serialOut((char *)a);
-    }
-
-    void serialOut(char *a)
-    {
-        int x = 0;
-        while (a[x] != '\0')
-        {
-            serialOut(a[x]);
-            x++;
-        }
-    }
-    void serialnOut(char *a, size_t num)
-    {
-        int x = 0;
-        while (a[x] != '\0' && x < num)
-        {
-            serialOut(a[x]);
-            x++;
-        }
-    }
-} // namespace io
+} // namespace serial

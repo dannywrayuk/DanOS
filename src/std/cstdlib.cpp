@@ -19,7 +19,7 @@ namespace std
     {
         uint8_t sign, expSign = FALSE;
         long double fraction, dblExp, *d;
-        register char *p, c;
+        char *p, c;
         int32_t exp = 0;
         int32_t fracExp = 0;
         int32_t mantSize;

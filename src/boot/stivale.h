@@ -14,27 +14,52 @@ struct stivale_header
     uint64_t entry_point;
 } __attribute__((packed));
 
+enum stivale_memmap_entry_type
+{
+    USABLE = 1,
+    RESERVED = 2,
+    ACPIRECLAIM = 3,
+    ACPINVS = 4
+};
+
+struct stivale_memmap_entry
+{
+    uint64_t base;
+    uint64_t size;
+    uint32_t type;
+    uint32_t unused;
+} __attribute__((packed));
+
+struct stivale_memmap
+{
+    struct stivale_memmap_entry *address;
+    uint64_t entries;
+} __attribute__((packed));
+
+struct stivale_framebuffer
+{
+    uint64_t address;
+    uint16_t pitch;
+    uint16_t width;
+    uint16_t height;
+    uint16_t bpp;
+} __attribute__((packed));
+
 struct stivale_module
 {
     uint64_t begin;
     uint64_t end;
-    char string[128];
+    char name[128];
     uint64_t next;
 } __attribute__((packed));
 
 struct stivale_struct
 {
-    uint64_t cmdline;
-    uint64_t memory_map_addr;
-    uint64_t memory_map_entries;
-    uint64_t framebuffer_addr;
-    uint16_t framebuffer_pitch;
-    uint16_t framebuffer_width;
-    uint16_t framebuffer_height;
-    uint16_t framebuffer_bpp;
+    char *cmdline;
+    struct stivale_memmap memmap;
+    struct stivale_framebuffer fb;
     uint64_t rsdp;
     uint64_t module_count;
-    uint64_t modules;
+    struct stivale_module module;
     uint64_t epoch;
-    uint64_t flags; // bit 0: 1 if booted with BIOS, 0 if booted with UEFI
 } __attribute__((packed));
