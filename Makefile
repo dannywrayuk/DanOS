@@ -23,9 +23,15 @@ ifeq ($(ENV),wsl)
 # Filter console junk from HAXM
 HAXM_FILTER= | grep -Ev "^(HAX is working|VCPU shutdown).*"
 
+# Can't run QEMU on HD in linux fs
+WIN_DRIVE=e
+KERNEL_HD_DIR=DanOS_BUILD
+KERNEL_HD_WIN=$(WIN_DRIVE):$(KERNEL_HD_DIR)/$(KERNEL).hd
+KERNEL_HD= /mnt/$(WIN_DRIVE)/$(KERNEL_HD_DIR)/$(KERNEL).hd
+
 # QEMU flags windows
 QEMU=qemu-system-x86_64.exe
-QEMUFLAGS= -m 2G -no-reboot -no-shutdown -accel hax -serial stdio -drive file=$(KERNEL_HD),format=raw  $(HAXM_FILTER)
+QEMUFLAGS= -m 2G -no-reboot -no-shutdown -accel hax -serial stdio -drive file=$(KERNEL_HD_WIN),format=raw  $(HAXM_FILTER)
 else
 
 # QEMU flags Linux
@@ -38,7 +44,7 @@ CPU= x86_64
 
 #		Cross Compiler Location
 AS= nasm
-CXX= ./cc/opt/cross/bin/$(CPU)-elf-g++
+CXX= ../cc/opt/cross/bin/$(CPU)-elf-g++
 
 #		Compiler Flags
 ASFLAGS= -felf64 -I$(SRC_DIR)
@@ -103,14 +109,15 @@ $(BUILD_DIR)/%.asm.o: %.asm
 #		Build Kernel Image
 $(KERNEL_HD): $(LIMINE_DIR) $(KERNEL_BIN) clean-hd
 	$(call STAGE, Building HDD image.)
+	@mkdir -p /mnt/$(WIN_DRIVE)/$(KERNEL_HD_DIR)
 	@dd if=/dev/zero bs=1M count=0 seek=64 of=$(KERNEL_HD) $(QUIET)
-	@parted -s $(KERNEL_HD) mklabel msdos  $(QUIET)
-	@parted -s $(KERNEL_HD) mkpart primary 1 100%  $(QUIET)
-	@echfs-utils -m -p0 $(KERNEL_HD) quick-format 32768 
+	@parted -s $(KERNEL_HD) mklabel msdos $(QUIET)
+	@parted -s $(KERNEL_HD) mkpart primary 1 100% $(QUIET)
+	@echfs-utils -m -p0 $(KERNEL_HD) quick-format 32768 > /dev/null
 	@echfs-utils -m -p0 $(KERNEL_HD) import $(KERNEL_BIN) $(KERNEL).bin
-	@echfs-utils -m -p0 $(KERNEL_HD) import $(RUN_DIR)/limine.cfg limine.cfg 
+	@echfs-utils -m -p0 $(KERNEL_HD) import $(RUN_DIR)/limine.cfg limine.cfg
 # install bootloader 
-	@$(LIMINE_DIR)/limine-install $(LIMINE_DIR)/$(LIMINE_BIN) $(KERNEL_HD) 
+	@$(LIMINE_DIR)/limine-install $(KERNEL_HD) $(QUIET)
 	$(DONE)
 
 #		Build Bootloader
@@ -126,12 +133,12 @@ $(LIMINE_DIR):
 clean: 
 	$(call STAGE, Cleaning temporary files.)
 	@rm -f  $(OBJ) $(KERNEL_BIN) $(DEPFILES)
-	@rm -d -r -f $(BUILD_DIR)/$(SRC_DIR)
+	@rm -rdf $(BUILD_DIR)/$(SRC_DIR)
 	$(DONE)
 
 clean-hd:
 	$(call STAGE, Cleaning hard disk.)
-	@rm -f $(KERNEL_HD)
+	@rm -rfd $(KERNEL_HD)
 	$(DONE)
 	
 

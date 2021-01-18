@@ -16,6 +16,7 @@ sudo apt-get install grub-common // might not be required if using pc-bin
 sudo apt-get install grub-pc-bin
 sudo apt-get install xorriso
 sudo apt install libexpat-dev
+cd ..
 mkdir cc
 cd cc
 mkdir src
