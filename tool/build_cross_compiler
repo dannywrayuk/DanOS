@@ -1,21 +1,7 @@
 export TARGET=x86_64-elf
-export PREFIX="$(pwd)/cc/opt/cross"
+export PREFIX="$(pwd)/../cc/opt/cross"
 
-
-sudo apt-get update
-sudo apt-get install build-essential
-sudo apt-get install bison
-sudo apt-get install flex
-sudo apt-get install libgmp3-dev
-sudo apt-get install libmpfr-dev // should already be installed
-sudo apt-get install libmpc-dev
-sudo apt-get install texinfo
-sudo apt-get install subversion 
-sudo apt-get install nasm
-sudo apt-get install grub-common // might not be required if using pc-bin
-sudo apt-get install grub-pc-bin
-sudo apt-get install xorriso
-sudo apt install libexpat-dev
+sudo apt-get install build-essential bison flex libgmp3-dev libmpfr-dev libmpc-dev texinfo subversion nasm grub-common grub-pc-bin xorriso libexpat-dev -y 
 cd ..
 mkdir cc
 cd cc
@@ -35,7 +21,7 @@ which -- $TARGET-as || echo $TARGET-as is not in the PATH
 mkdir build-gcc
 cd build-gcc
 ../gcc/configure --target=$TARGET --prefix="$PREFIX" --disable-nls --enable-languages=c,c++ --without-headers --with-expat
-make all-gcc
-make all-target-libgcc
-make install-gcc
-make install-target-libgcc
+make all-gcc -j 20
+make all-target-libgcc -j 20
+make install-gcc -j 20
+make install-target-libgcc -j 20

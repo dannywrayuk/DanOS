@@ -20,8 +20,8 @@ LIMINE_BIN= limine.bin
 ENV= wsl
 
 ifeq ($(ENV),wsl)
-# Filter console junk from HAXM
-HAXM_FILTER= | grep -Ev "^(HAX is working|VCPU shutdown).*"
+# pipe though linux for correct text
+PIPE= | grep -Ev "^(Windows Hypervisor).*"
 
 # Can't run QEMU on HD in linux fs
 WIN_DRIVE=e
@@ -30,8 +30,8 @@ KERNEL_HD_WIN=$(WIN_DRIVE):$(KERNEL_HD_DIR)/$(KERNEL).hd
 KERNEL_HD= /mnt/$(WIN_DRIVE)/$(KERNEL_HD_DIR)/$(KERNEL).hd
 
 # QEMU flags windows
-QEMU=qemu-system-x86_64.exe
-QEMUFLAGS= -m 2G -no-reboot -no-shutdown -accel hax -serial stdio -drive file=$(KERNEL_HD_WIN),format=raw  $(HAXM_FILTER)
+QEMU=qemu-system-x86_64.exe -L "C:\Program Files\qemu"
+QEMUFLAGS= -m 2G -accel whpx -no-reboot -no-shutdown -serial stdio -drive file=$(KERNEL_HD_WIN),format=raw  $(PIPE)
 else
 
 # QEMU flags Linux
@@ -123,7 +123,7 @@ $(KERNEL_HD): $(LIMINE_DIR) $(KERNEL_BIN) clean-hd
 #		Build Bootloader
 $(LIMINE_DIR):
 	$(call STAGE, Building Bootloader.)
-	@git clone $(LIMINE_URL) $(LIMINE_DIR)  $(QUIET)
+	@git clone $(LIMINE_URL) $(LIMINE_DIR) --branch=v1.0  $(QUIET)
 	@make limine-install -C $(LIMINE_DIR) --silent $(QUIET)
 	$(DONE)
 	$(GAP)
